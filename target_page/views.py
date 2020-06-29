@@ -2,48 +2,33 @@
 #
 # # Create your views here.
 import requests
-from django.shortcuts import render, reverse
+from django.shortcuts import render, reverse, redirect, HttpResponseRedirect
 from django.http import HttpResponse
+from django.contrib import messages
 import ahttp
+from target_page.web_page import hezongyy_py
+from target_page.models import hezongyy_py1
 
 def index(request):
     return render(request, 'index.html')
 
 def index_result(request):
     if request.method == 'GET':
-        r = request.GET["q"]  # key就是前面输入框里的name属性对应值name="q"
+        r = request.GET["url"]  # key就是前面输入框里的name属性对应值name="q"
+        c = request.GET["number"]
         if r == "www":
-            return HttpResponse("测试结果：www")
+            hezongyy_py.crawl_hezongyy(int(c))  # 调用采集数据
+            hezongyy_py.save_mysql()  # 调用保存到数据库中
+            users = hezongyy_py1.objects.all()  # 数据库中读取数据
+            return render(request, 'hezongyy_py.html', {'users': users})
         if r == "xxx":
             return HttpResponse("测试结果：xxx")
+        else:
+            return HttpResponseRedirect("/get_demo")
+
     else:
         render(request, 'index.html')
 
-
-
-# def test_qq(request):
-#     '''请求页面'''
-#     return render(request, 'get_demo.html')
-#
-# def result_qq(request):
-#     '''返回结果'''
-#     if request.method == 'GET':
-#         # 获取提交的数据
-#         r = request.GET["q"]  # key就是前面输入框里的name属性对应值name="q"
-#         # url = "http://" + r
-#         req = ahttp.get(r)
-#         res = req.run()
-#         # res = requests.get(r)
-#         # req = res.text
-# #         # res = ""
-# #         # try:
-# #         #     if int(r) % 2:
-# #         #         res = "大吉大利！"
-# #         #     else:
-# #         #         res = "恭喜发财！"
-# #         # except:
-# #         #     res = "请输入正确QQ号！"
-# #
-#         return HttpResponse("测试结果：%s" % res.text)
-#     else:
-#         render(request, 'get_demo.html')
+def toast(request):
+    messages.success(request, "暂时无法抓取该url,请返回重新输入")
+    return render(request, 'get_demo.html')

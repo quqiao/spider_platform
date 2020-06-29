@@ -5,13 +5,21 @@
     <title>测试你的QQ号</title>
 </head>
 <body>
-<p>请输入你的QQ号</p>
+<!--<p>请输入你的QQ号</p>-->
 
-<form action="/result" method="get">
-    qq: <input type="text" name="q"> <br>
-    <br>
-    <input type="submit" value="提交">
-</form>
+<!--<form action="/result" method="get">-->
+<!--    qq: <input type="text" name="q"> <br>-->
+<!--    <br>-->
+<!--    <input type="submit" value="提交">-->
+<!--</form>-->
+
+{% if messages %}
+        <script>
+            {% for msg in messages %}
+                alert('{{ msg.message }}');
+            {% endfor %}
+        </script>
+    {% endif %}
 
 </body>
 </html>

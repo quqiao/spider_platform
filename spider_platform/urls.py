@@ -22,6 +22,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^index/', views.index),
     url(r'^result', views.index_result),
+    url(r'^hezongyy_py/', views.index_result),
+    url(r'^get_demo/', views.toast),
+
     # url(r'^qq/', views.test_qq),
     # url(r'^result/', views.result_qq),
 ]

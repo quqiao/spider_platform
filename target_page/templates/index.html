@@ -48,13 +48,15 @@
     <title>爬虫平台首页</title>
 </head>
 <body>
+    <center>
     <h1>欢迎使用爬虫采集器</h1>
-    <p></p>
     <form action="/result" method="get">
-    <input type="text" name="q" placeholder="请输入需要采集的网址">
+    <input type="text" name="url" placeholder="请输入需要采集的网址" required="required"> *
+    <input type="text" name="number"  placeholder="输入抓取的页数" required="required"  onkeyup = "value=value.replace(/[^\d]/g,'')">*
     <input type="submit" value="提交">
 </form>
+        </center>
 
-</form>
+
 </body>
 </html>

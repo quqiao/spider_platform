@@ -13,9 +13,10 @@ list_mingzi = []
 list_compamy = []
 list_guige = []
 list_xiaoqi = []
-executable_path = "C:/Users/Administrator/AppData/Local/Google/Chrome/Application/chromedriver.exe"
-driver = webdriver.Chrome(executable_path=executable_path)
-def login_hezongyy():
+
+def crawl_hezongyy(count):
+    executable_path = "C:/Users/Administrator/AppData/Local/Google/Chrome/Application/chromedriver.exe"
+    driver = webdriver.Chrome(executable_path=executable_path)
     driver.get("https://www.hezongyy.com/auth/login")
     time.sleep(2)
     username = driver.find_element_by_name('user_name')
@@ -24,30 +25,29 @@ def login_hezongyy():
     password.send_keys('123456')
     # 模拟点击“登录”按钮
     driver.find_element_by_class_name('login').click()
-
-def crawl_hezongyy(count):
     time.sleep(1)
-    driver.get("https://www.hezongyy.com/puyao.html?order=DESC&pageNumber=%d" % count)
-    time.sleep(3)  # 停顿3秒等待页面加载完毕！！！（必须留有页面加载的时间，否则获得的源代码会不完整。）
-    html_sourcode = driver.page_source
+    for i in range(1, count+1):
+        driver.get("https://www.hezongyy.com/puyao.html?order=DESC&pageNumber=%d" % i)
+        time.sleep(3)  # 停顿3秒等待页面加载完毕！！！（必须留有页面加载的时间，否则获得的源代码会不完整。）
+        html_sourcode = driver.page_source
+        soup = BeautifulSoup(html_sourcode, 'lxml')
+        # jg = soup.find_all(attrs={'class': {'datu-jiage'}})
+        jg = soup.find_all(class_="datu-jiage")
+        mz = soup.find_all(class_="datu-mingzi")
+        cj = soup.find_all(class_="datu-compamy")
+        gg = soup.find_all(class_="datu-guige")
+        xq = soup.find_all(class_="datu-xiaoqi")
+        for i in jg:
+            list_jiage.append(i.text)
+        for t in mz:
+            list_mingzi.append(t.text)
+        for j in cj:
+            list_compamy.append(j.text)
+        for g in gg:
+            list_guige.append(g.text)
+        for x in xq:
+            list_xiaoqi.append(x.text)
     driver.close()
-    soup = BeautifulSoup(html_sourcode, 'lxml')
-    # jg = soup.find_all(attrs={'class': {'datu-jiage'}})
-    jg = soup.find_all(class_="datu-jiage")
-    mz = soup.find_all(class_="datu-mingzi")
-    cj = soup.find_all(class_="datu-compamy")
-    gg = soup.find_all(class_="datu-guige")
-    xq = soup.find_all(class_="datu-xiaoqi")
-    for i in jg:
-        list_jiage.append(i.text)
-    for t in mz:
-        list_mingzi.append(t.text)
-    for j in cj:
-        list_compamy.append(j.text)
-    for g in gg:
-        list_guige.append(g.text)
-    for x in xq:
-        list_xiaoqi.append(x.text)
 
 
 def save_csv():
@@ -57,7 +57,7 @@ def save_csv():
 def save_mysql():
     conn = pymysql.connect('localhost', 'root', '123456', 'spider_platform')  # 有中文要存入数据库的话要加charset='utf8'
     # 创建游标
-    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    cursor = conn.cursor()  # pymysql.cursors.DictCursor
     cursor.execute("DROP TABLE IF EXISTS hezongyy_py")
     # 使用预处理语句创建表
     sql = """
