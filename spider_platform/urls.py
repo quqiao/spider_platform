@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url
 from target_page import views
+from django.urls import path, re_path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,6 +25,9 @@ urlpatterns = [
     url(r'^result', views.index_result),
     url(r'^hezongyy_py/', views.index_result),
     url(r'^get_demo/', views.toast),
+    url(r'^demo/', views.demo),
+    # url(r'^login', views.demo),
+    re_path('submit/', include("target_page.urls")),
 
     # url(r'^qq/', views.test_qq),
     # url(r'^result/', views.result_qq),

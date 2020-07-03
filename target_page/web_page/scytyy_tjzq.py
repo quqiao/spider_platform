@@ -1,5 +1,7 @@
 import requests
+from lxml import etree
 from bs4 import BeautifulSoup
+"""通过requests请求获取cookie，然后再进行获取该网页text"""
 
 def login():
     login_url = 'http://www.scytyy.net/login.html'
@@ -31,17 +33,25 @@ def get_data():
         }
     res = requests.post(url=get_url, data=body, headers=headers, cookies=cookie)
     print(res.text)
-    return res.text
+    # return res.text
 
+list_compamy = []
 def crawl_scytyy():
-    soup = BeautifulSoup(get_data(), 'lxml')
-    jg = soup.find_all(class_="price_1")
-    mz = soup.find_all(class_="l_ty")
-    cj = soup.find_all('li')
-    cj1 = cj[0]
-    cj2 = cj1.find_parents('ul')
+    # soup = BeautifulSoup(get_data(), 'lxml')
+    # jg = soup.find_all(class_="price_1")
+    # mz = soup.find_all(class_="l_ty")
+    # cj = soup.find_all('li')
+    # cj1 = cj[2]
+    # print(cj1)
+    # # for j in cj1:
+    # #     list_compamy.append(j.text)
+    # # print(list_compamy)
+    html = etree.HTML(get_data(), etree.HTMLParser())
+    result = html.xpath('//ul/li//text()')
+    print(result)
 
 
 if __name__ == '__main__':# 验证拼接后的正确性
     print(login())
     print(get_data())
+    print(crawl_scytyy())
