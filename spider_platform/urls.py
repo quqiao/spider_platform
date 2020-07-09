@@ -21,8 +21,10 @@ from django.urls import path, re_path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    url(r'^home', views.home),
+    url(r'^result_home', views.result_home),
     url(r'^index/', views.index),
-    url(r'^result', views.index_result),
+    url(r'^result_index', views.index_result),
     url(r'^hezongyy_py/', views.index_result),
     url(r'^get_demo/', views.toast),
     url(r'^demo/', views.demo),

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>爬虫平台首页(新版）</title>
+</head>
+<body>
+    <center>
+    <h1>欢迎使用爬虫采集器</h1>
+    <h2>输入需要抓取的网页</h2>
+    <input type="text" id="url" placeholder="输入登录网址"/>
+    <input type="button" value="提交登录网址"  onclick="iframeRequest();" />
+    <h2>开始抓取</h2>
+        <form action="/result_home" method="get">
+            <input type="text" name="empty" id="empty" placeholder="不用填写" />
+            <input type="submit" name="submit" id="submit" value="提交按钮" onclick="getRequest();"/>
+        </form>
+
+    </center>
+<!--    <p></p>-->
+<!--    <p></p>-->
+<!--    <div id="divname" src><a href=""></a></div>-->
+    <iframe id="ifm" src="" name="test" style="height: 1000px;width: 1800px"></iframe>
+    <script type="text/javascript" src="/static/jquery-1.12.4.js"></script>
+    <script>
+        function iframeRequest(){
+            var url = $('#url').val();
+            $('#ifm').attr('src',url);
+        }
+        function getRequest(){
+                    var x=document.getElementById("ifm");
+                    alert(x.contentWindow.document.documentElement.innerText);
+        }
+
+    </script>
+</body>
+</html>
+
+<!--ifm.contentWindow.document.body.innerHTML;-->
+<!--var test = document.getElementById("ifm");-->
+<!--document.getElementById("empty").value = test.contentWindow.document.body.outerHTML-->
+<!--x.contentWindow.document.documentElement.outerHTML-->
