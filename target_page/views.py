@@ -75,5 +75,5 @@ def toast2(request):
     return render(request, 'index.html')
 
 
-def demo(request):
-    return render(request, 'demo.html')
+def demo_css(request):
+    return render(request, 'demo_css.html')

@@ -27,7 +27,7 @@ urlpatterns = [
     url(r'^result_index', views.index_result),
     url(r'^hezongyy_py/', views.index_result),
     url(r'^get_demo/', views.toast),
-    url(r'^demo/', views.demo),
+    url(r'^demo_css/', views.demo_css),
     # url(r'^login', views.demo),
     re_path('submit/', include("target_page.urls")),
 
