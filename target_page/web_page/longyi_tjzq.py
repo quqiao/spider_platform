@@ -14,27 +14,25 @@ list_compamy = []
 list_guige = []
 list_xiaoqi = []
 
-def crawl_hezongyy(count):
+def crawl_longyi_tjzq(count):
     executable_path = "C:/Users/Administrator/AppData/Local/Google/Chrome/Application/chromedriver.exe"
     driver = webdriver.Chrome(executable_path=executable_path)
-    driver.get("https://www.hezongyy.com/auth/login")
+    driver.get("http://www.longyiyy.com/login.html")
     time.sleep(2)
-    username = driver.find_element_by_name('user_name')
-    password = driver.find_element_by_name('password')
-    username.send_keys('测试05')
+    username = driver.find_element_by_name('username')
+    password = driver.find_element_by_name('userpass')
+    username.send_keys('18030535053')
     password.send_keys('123456')
     # 模拟点击“登录”按钮
-    driver.find_element_by_class_name('login').click()
+    driver.find_element_by_class_name('is').click()
     time.sleep(1)
     for i in range(1, count+1):
-        driver.get("https://www.hezongyy.com/puyao.html?order=DESC&pageNumber=%d" % i)
+        driver.get("http://www.longyiyy.com/events-filter-589-%d-1.html" % i)
         time.sleep(3)  # 停顿3秒等待页面加载完毕！！！（必须留有页面加载的时间，否则获得的源代码会不完整。）
         html_sourcode = driver.page_source
-        print(html_sourcode)
         soup = BeautifulSoup(html_sourcode, 'lxml')
         # jg = soup.find_all(attrs={'class': {'datu-jiage'}})
         jg = soup.find_all(class_="datu-jiage")
-        print(jg)
         mz = soup.find_all(class_="datu-mingzi")
         cj = soup.find_all(class_="datu-compamy")
         gg = soup.find_all(class_="datu-guige")
@@ -86,8 +84,7 @@ def save_mysql():
     cursor.close()
     conn.close()
 
-if __name__ == '__main__':  # 验证拼接后的正确性
-    crawl_hezongyy(1)
+
 
 
 

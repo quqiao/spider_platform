@@ -27,6 +27,20 @@
         a:visited {color:#00FF00;}  /* 已访问链接 */
         a:hover {color:#FF00FF;}  /* 鼠标移动到链接上 */
         a:active {color:#0000FF;}  /* 鼠标点击时 */
+        #overflowTest {
+                        background: #4CAF50;
+                        color: white;
+                        padding: 15px;
+                        width: 80%;
+                        height: 100px;
+                        overflow: auto;
+                        border: 1px solid #ccc;
+                      }
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
     </style>
 </head>
 <body>
@@ -38,5 +52,26 @@
     <p><b><a href="https://www.baidu.com/" target="_blank">这是一个链接</a></b></p>
     <p><b>注意：</b> a:hover 必须在 a:link 和 a:visited 之后，需要严格按顺序才能看到效果。</p>
     <p><b>注意：</b> a:active 必须在 a:hover 之后。</p>
+    <div id="overflowTest">
+        <p>这里的文本内容是可以滚动的1，滚动条方向是垂直方向。</p>
+        <p>这里的文本内容是可以滚动的2，滚动条方向是垂直方向。</p>
+        <p>这里的文本内容是可以滚动的3，滚动条方向是垂直方向。</p>
+        <p>这里的文本内容是可以滚动的4，滚动条方向是垂直方向。</p>
+        <p>这里的文本内容是可以滚动的5，滚动条方向是垂直方向。</p>
+        <p>这里的文本内容是可以滚动的6，滚动条方向是垂直方向。</p>
+    </div>
+    <ul>
+          <li><a href="#home">主页</a></li>
+          <li><a href="#news">新闻</a></li>
+          <li><a href="#contact">联系</a></li>
+          <li><a href="#about">关于</a></li>
+    </ul>
+    <button onclick="myFunction('pirlo', 'football')">点击这里</button>
+    <script>
+        function myFunction(name, job){
+                alert("welcome" + name + ", work in " + job);
+        }
+    </script>
+
 </body>
 </html>

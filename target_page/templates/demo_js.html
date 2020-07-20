@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+    function myFunction(){
+        var d = new Date();
+        var time = d.getHours();
+        var x = ""
+        if (time<10)
+        {
+           x = document.write("<b>早上好</b>");
+        }
+        else if (time>=10 && time<20)
+        {
+           x =  "今天好";
+        }
+        else
+        {
+           x = document.write("<b>晚上好!</b>");
+        }
+        document.getElementById("demo").innerHTML=x;
+    }
+</script>
+<button onclick="myFunction()">点击这里</button>
+<p id="demo"></p>
+<p>
+这个例子演示了 if..else if...else 语句。
+</p>
+
+</body>
+</html>
