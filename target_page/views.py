@@ -5,13 +5,9 @@ import requests
 from django.shortcuts import render, reverse, redirect, HttpResponseRedirect
 from django.http import HttpResponse, HttpRequest
 from django.contrib import messages
-import os
-from spider_platform import settings
-import json
-import ahttp
-from target_page.web_page import hezongyy_py, ysb_lyg
-from target_page.models import hezongyy_py1, ysb_lyg1
-from lxml import etree
+from target_page.web_page import hezongyy_py, ysb_lyg, longyi_tjzq
+from target_page.models import hezongyy_py1, ysb_lyg1,longyi_tjzq1
+import re
 
 
 def home(request):
@@ -38,12 +34,20 @@ def index_result(request):
     if request.method == 'GET':
         r = request.GET["url"]  # key就是前面输入框里的name属性对应值name="q"
         c = request.GET["number"]
-        if "hezongyy.com/puyao" in r:
+        shuzi = re.findall("\d+", r)
+        shuzi1 = ''.join(shuzi)
+        if "hezongyy.com/puyao" in r:   # 判断合纵药易购普药专区
             hezongyy_py.crawl_hezongyy(int(c))  # 调用采集数据
             hezongyy_py.save_mysql()  # 调用保存到数据库中
             users = hezongyy_py1.objects.all()  # 数据库中读取数据
             return render(request, 'hezongyy_py.html', {'users': users})
-        if r == "ysbang":
+
+        elif "http://www.longyiyy.com/events" in r:  # 判断龙一医药网特价专区
+            longyi_tjzq.crawl_longyi_tjzq(shuzi1, int(c))
+            longyi_tjzq.save_mysql()
+            users = longyi_tjzq1.objects.all()
+            return render(request, 'longyi_tjzq.html', {'users': users})
+        elif r == "ysbang":
             ysb_lyg.crawl_hezongyy(int(c))  # 调用采集数据
             ysb_lyg.save_csv()  # 调用保存到数据库中
             # users = ysb_lyg1.objects.all()  # 数据库中读取数据
@@ -65,7 +69,6 @@ def iframe(request):
         import json
         return HttpResponse(json.dumps(ret))
 
-
 def toast(request):
     messages.success(request, "暂时无法抓取该url,请返回重新输入")
     return render(request, 'get_demo.html')
@@ -73,7 +76,6 @@ def toast(request):
 def toast2(request):
     messages.success(request, "暂时无法抓取该url,请返回重新输入")
     return render(request, 'index.html')
-
 
 def demo_css(request):
     return render(request, 'demo_css.html')

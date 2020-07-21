@@ -34,12 +34,13 @@ def crawl_hezongyy():
     html = etree.HTML(html_sourcode, etree.HTMLParser())
     for i in range(1, 41):
         jg = html.xpath('//*[@id="datu"]/div/ul/li[%d]/div[2]/div/text()' %i)
-        print(jg)
-        list_jiage.append(jg)
+        jg1 = ''.join(jg)
+        list_jiage.append(jg1)
     print(list_jiage)
     # soup = BeautifulSoup(html_sourcode, 'lxml')
     # all1 = soup.find_all(["li", "div"])
     # print(all1)
+    driver.close()
 
 def save_csv():
     dataframe = pd.DataFrame({'价格': list_jiage})  # 字典中的key值即为csv中列名
