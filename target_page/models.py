@@ -33,3 +33,36 @@ class longyi_tjzq1(models.Model):
     class Meta:
         managed = True
         db_table = 'longyi_tjzq'
+
+class longyi_yp1(models.Model):
+    ID = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
+    name = models.CharField(max_length=100)
+    cj = models.CharField(max_length=100)
+    gg = models.CharField(max_length=100)
+    xq = models.CharField(max_length=100)
+    price = models.CharField(max_length=100)
+    class Meta:
+        managed = True
+        db_table = 'longyi_yp'
+
+class scjuchuang_py1(models.Model):
+    ID = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
+    name = models.CharField(max_length=100)
+    cj = models.CharField(max_length=100)
+    gg = models.CharField(max_length=100)
+    xq = models.CharField(max_length=100)
+    price = models.CharField(max_length=100)
+    class Meta:
+        managed = True
+        db_table = 'scjuchuang_py'
+
+class ypzdw_jtj1(models.Model):
+    ID = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
+    name = models.CharField(max_length=100)
+    cj = models.CharField(max_length=100)
+    gg = models.CharField(max_length=100)
+    sj = models.CharField(max_length=100)
+    price = models.CharField(max_length=100)
+    class Meta:
+        managed = True
+        db_table = 'sypzdw_jtj'

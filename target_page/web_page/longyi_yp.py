@@ -12,7 +12,7 @@ list_compamy = []
 list_guige = []
 list_xiaoqi = []
 
-def crawl_longyi_tjzq(shuzi, count):
+def crawl_longyi_yp(count):
     executable_path = "C:/Users/Administrator/AppData/Local/Google/Chrome/Application/chromedriver.exe"
     driver = webdriver.Chrome(executable_path=executable_path)
     driver.get("http://www.longyiyy.com/login.html")
@@ -25,28 +25,28 @@ def crawl_longyi_tjzq(shuzi, count):
     driver.find_element_by_class_name('is').click()
     time.sleep(1)
     for i in range(1, count+1):
-        driver.get("http://www.longyiyy.com/events-filter-%d-%d-1.html" % (shuzi, i))
+        driver.get("http://www.longyiyy.com/goods-filter-0-0-0-0-0-0-1-%d.html" % i)
         time.sleep(3)  # 停顿3秒等待页面加载完毕！！！（必须留有页面加载的时间，否则获得的源代码会不完整。）
         html_sourcode = driver.page_source
         html = etree.HTML(html_sourcode, etree.HTMLParser())
         for j in range(1, 41):
-            jg = html.xpath('/html/body/div[4]/div/div[4]/ul/li[%d]/p[7]/span[1]/text()' % j)
+            jg = html.xpath('//*[@id="pro_list1"]/li[%d]/p[2]/span[2]/text()' % j)
             jg1 = ''.join(jg)
             list_jiage.append(jg1)
         for n in range(1, 41):
-            cj = html.xpath('/html/body/div[4]/div/div[4]/ul/li[%d]/p[2]/text()' % n)
+            cj = html.xpath('//*[@id="pro_list1"]/li[%d]/p[3]/text()' % n)
             cj1 = ''.join(cj)
             list_compamy.append(cj1)
         for m in range(1, 41):
-            mz = html.xpath('/html/body/div[4]/div/div[4]/ul/li[%d]/p[1]/a/text()' % m)
+            mz = html.xpath('//*[@id="pro_list1"]/li[%d]/p[1]/a/text()' % m)
             mz1 = ''.join(mz)
             list_mingzi.append(mz1)
         for g in range(1, 41):
-            gg = html.xpath('/html/body/div[4]/div/div[4]/ul/li[%d]/p[3]/span/text()' % g)
+            gg = html.xpath('//*[@id="pro_list1"]/li[%d]/p[4]/span/text()' % g)
             gg1 = ''.join(gg)
             list_guige.append(gg1)
         for x in range(1, 41):
-            xq = html.xpath('/html/body/div[4]/div/div[4]/ul/li[%d]/p[6]/text()' % x)
+            xq = html.xpath('//*[@id="pro_list1"]/li[%d]/p[6]/span[1]/i/text()' % x)
             xq1 = ''.join(xq)
             list_xiaoqi.append(xq1)
     driver.close()
@@ -61,10 +61,10 @@ def save_mysql():
     conn = pymysql.connect('localhost', 'root', '123456', 'spider_platform')  # 有中文要存入数据库的话要加charset='utf8'
     # 创建游标
     cursor = conn.cursor()  # pymysql.cursors.DictCursor
-    cursor.execute("DROP TABLE IF EXISTS longyi_tjzq")
+    cursor.execute("DROP TABLE IF EXISTS longyi_yp")
     # 使用预处理语句创建表
     sql = """
-          CREATE TABLE longyi_tjzq 
+          CREATE TABLE longyi_yp 
           (
              ID int unsigned auto_increment primary key,
              name VARCHAR(100),
@@ -76,7 +76,7 @@ def save_mysql():
           """
     cursor.execute(sql)
     insert_sql = """
-                 insert into longyi_tjzq 
+                 insert into longyi_yp 
                  (name,cj,gg,xq,price) 
                  VALUES
                  (%s,%s,%s,%s,%s)

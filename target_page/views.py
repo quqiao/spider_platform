@@ -5,8 +5,8 @@ import requests
 from django.shortcuts import render, reverse, redirect, HttpResponseRedirect
 from django.http import HttpResponse, HttpRequest
 from django.contrib import messages
-from target_page.web_page import hezongyy_py, ysb_lyg, longyi_tjzq
-from target_page.models import hezongyy_py1, ysb_lyg1,longyi_tjzq1
+from target_page.web_page import hezongyy_py, ysb_lyg, longyi_tjzq, longyi_yp, scjuchuang_py, ypzdw_jtj
+from target_page.models import hezongyy_py1, ysb_lyg1, longyi_tjzq1, longyi_yp1, scjuchuang_py1, ypzdw_jtj1
 import re
 
 
@@ -47,6 +47,26 @@ def index_result(request):
             longyi_tjzq.save_mysql()
             users = longyi_tjzq1.objects.all()
             return render(request, 'longyi_tjzq.html', {'users': users})
+
+        elif "http://www.longyiyy.com/goods" in r:  # 判断龙一医药网药品专区
+            longyi_yp.crawl_longyi_yp(int(c))
+            longyi_yp.save_mysql()
+            users = longyi_yp1.objects.all()
+            return render(request, 'longyi_yp.html', {'users': users})
+
+        elif "https://www.ypzdw.com/jshop" in r:  # 判断药品终端网阶梯价专区
+            ypzdw_jtj.crawl_ypzdw_jtj(int(c))
+            ypzdw_jtj.save_mysql()
+            users = ypzdw_jtj1.objects.all()
+            return render(request, 'ypzdw_jtj.html', {'users': users})
+
+
+        elif "www.scjuchuang.com/goods" in r:  # 判断四川聚创医药普药专区
+            scjuchuang_py.crawl_scjuchuan_py(int(c))
+            scjuchuang_py.save_mysql()
+            users = scjuchuang_py1.objects.all()
+            return render(request, 'scjuchuang_py.html', {'users': users})
+
         elif r == "ysbang":
             ysb_lyg.crawl_hezongyy(int(c))  # 调用采集数据
             ysb_lyg.save_csv()  # 调用保存到数据库中
