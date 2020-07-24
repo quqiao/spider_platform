@@ -31,35 +31,35 @@ def crawl_scjuchuan_py(count):
         time.sleep(3)  # 停顿3秒等待页面加载完毕！！！（必须留有页面加载的时间，否则获得的源代码会不完整。）
         html_sourcode = driver.page_source
         html = etree.HTML(html_sourcode, etree.HTMLParser())
-        for j1 in range(1, 41):
+        for j1 in range(1, 21):
             jg1 = html.xpath('/html/body/div[8]/ul/li[%d]/div[2]/text()' % j1)
             price1 = ''.join(jg1)
             list_price1.append(price1)
 
-        for j2 in range(1, 41):
+        for j2 in range(1, 21):
             jg2 = html.xpath('/html/body/div[8]/ul/li[%d]/div[2]/span[1]/text()' % j2)
             price2 = ''.join(jg2)
             list_price2.append(price2)
 
-        for j3 in range(1, 41):
+        for j3 in range(1, 21):
             jg3 = html.xpath('/html/body/div[8]/ul/li[%d]/div[1]/p/span[2]/text()' % j3)
             price3 = ''.join(jg3)
             list_price3.append(price3)
 
-        for n in range(1, 41):
-            cj = html.xpath('/html/body/div[4]/div/div[4]/ul/li[%d]/p[2]/text()' % n)
+        for n in range(1, 21):
+            cj = html.xpath('/html/body/div[8]/ul/li[%d]/p[1]/text()' % n)
             cj1 = ''.join(cj)
             list_compamy.append(cj1)
-        for m in range(1, 41):
-            mz = html.xpath('/html/body/div[4]/div/div[4]/ul/li[%d]/p[1]/a/text()' % m)
+        for m in range(1, 21):
+            mz = html.xpath('/html/body/div[8]/ul/li[%d]/div[3]/text()' % m)
             mz1 = ''.join(mz)
             list_mingzi.append(mz1)
-        for g in range(1, 41):
-            gg = html.xpath('/html/body/div[4]/div/div[4]/ul/li[%d]/p[3]/span/text()' % g)
+        for g in range(1, 21):
+            gg = html.xpath('/html/body/div[8]/ul/li[%d]/p[2]/text()' % g)
             gg1 = ''.join(gg)
             list_guige.append(gg1)
-        for x in range(1, 41):
-            xq = html.xpath('/html/body/div[4]/div/div[4]/ul/li[%d]/p[6]/text()' % x)
+        for x in range(1, 21):
+            xq = html.xpath('/html/body/div[8]/ul/li[%d]/p[3]/span[1]/text()' % x)
             xq1 = ''.join(xq)
             list_xiaoqi.append(xq1)
     driver.close()
@@ -74,10 +74,10 @@ def save_mysql():
     conn = pymysql.connect('localhost', 'root', '123456', 'spider_platform')  # 有中文要存入数据库的话要加charset='utf8'
     # 创建游标
     cursor = conn.cursor()  # pymysql.cursors.DictCursor
-    cursor.execute("DROP TABLE IF EXISTS scjuchuan_py")
+    cursor.execute("DROP TABLE IF EXISTS scjuchuang_py")
     # 使用预处理语句创建表
     sql = """
-          CREATE TABLE scjuchuan_py 
+          CREATE TABLE scjuchuang_py 
           (
              ID int unsigned auto_increment primary key,
              name VARCHAR(100),
@@ -86,12 +86,12 @@ def save_mysql():
              xq VARCHAR(100),
              price1 VARCHAR(100),
              price2 VARCHAR(100),
-             price3 VARCHAR(100),
+             price3 VARCHAR(100)
           )
           """
     cursor.execute(sql)
     insert_sql = """
-                 insert into scjuchuan_py 
+                 insert into scjuchuang_py 
                  (name,cj,gg,xq,price1,price2,price3) 
                  VALUES
                  (%s,%s,%s,%s,%s,%s,%s)

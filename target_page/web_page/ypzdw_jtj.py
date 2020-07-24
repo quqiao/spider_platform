@@ -18,9 +18,9 @@ def crawl_ypzdw_jtj(count):
     driver.get("https://account.ypzdw.com/login?application=yw-ypzdw")
     time.sleep(2)
     # 模拟输入账号密码
-    username = driver.find_element_by_class_name(
+    username = driver.find_element_by_xpath(
         '//*[@id="app"]/section/section/div/div[2]/div/div[2]/div[1]/div[2]/form/div[1]/div/div/input')
-    password = driver.find_element_by_class_name(
+    password = driver.find_element_by_xpath(
         '//*[@id="app"]/section/section/div/div[2]/div/div[2]/div[1]/div[2]/form/div[2]/div/div/input')
     username.send_keys('bianyuantianshi')
     password.send_keys('19860201xy')
@@ -28,27 +28,27 @@ def crawl_ypzdw_jtj(count):
     driver.find_element_by_class_name('el-button.button-submit.el-button--primary').click()
     time.sleep(2)
     for i in range(1, count+1):
-        driver.get("'https://www.ypzdw.com/jshop/ca/commonRec?t=personTiered&p=1&show=all&topid=0'" % i)
+        driver.get("https://www.ypzdw.com/jshop/ca/commonRec?t=personTiered&p=%d&show=all&topid=0" % i)
         time.sleep(3)  # 停顿3秒等待页面加载完毕！！！（必须留有页面加载的时间，否则获得的源代码会不完整。）
         html_sourcode = driver.page_source
         html = etree.HTML(html_sourcode, etree.HTMLParser())
-        for j in range(1, 41):
+        for j in range(1, 21):
             jg = html.xpath('/html/body/div[2]/div[2]/div[2]/div/ul/li[%d]/div[1]/a/div[4]/p[2]/text()' % j)
             jg1 = ''.join(jg)
             list_jiage.append(jg1)
-        for n in range(1, 41):
+        for n in range(1, 21):
             cj = html.xpath('/html/body/div[2]/div[2]/div[2]/div/ul/li[%d]/div[3]/p[2]/text()' % n)
             cj1 = ''.join(cj)
             list_compamy.append(cj1)
-        for m in range(1, 41):
+        for m in range(1, 21):
             mz = html.xpath('/html/body/div[2]/div[2]/div[2]/div/ul/li[%d]/div[2]/a/text()' % m)
             mz1 = ''.join(mz)
             list_mingzi.append(mz1)
-        for g in range(1, 41):
+        for g in range(1, 21):
             gg = html.xpath('/html/body/div[2]/div[2]/div[2]/div/ul/li[%d]/div[3]/p[1]/text()' % g)
             gg1 = ''.join(gg)
             list_guige.append(gg1)
-        for s in range(1, 41):
+        for s in range(1, 21):
             sj = html.xpath('/html/body/div[2]/div[2]/div[2]/div/ul/li[%d]/div[3]/p[3]/a/text()' % s)
             sj1 = ''.join(sj)
             list_shangjia.append(sj1)

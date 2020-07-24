@@ -51,7 +51,9 @@ class scjuchuang_py1(models.Model):
     cj = models.CharField(max_length=100)
     gg = models.CharField(max_length=100)
     xq = models.CharField(max_length=100)
-    price = models.CharField(max_length=100)
+    price1 = models.CharField(max_length=100)
+    price2 = models.CharField(max_length=100)
+    price3 = models.CharField(max_length=100)
     class Meta:
         managed = True
         db_table = 'scjuchuang_py'
@@ -65,4 +67,4 @@ class ypzdw_jtj1(models.Model):
     price = models.CharField(max_length=100)
     class Meta:
         managed = True
-        db_table = 'sypzdw_jtj'
+        db_table = 'ypzdw_jtj'

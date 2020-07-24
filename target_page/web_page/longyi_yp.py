@@ -29,23 +29,23 @@ def crawl_longyi_yp(count):
         time.sleep(3)  # 停顿3秒等待页面加载完毕！！！（必须留有页面加载的时间，否则获得的源代码会不完整。）
         html_sourcode = driver.page_source
         html = etree.HTML(html_sourcode, etree.HTMLParser())
-        for j in range(1, 41):
+        for j in range(1, 21):
             jg = html.xpath('//*[@id="pro_list1"]/li[%d]/p[2]/span[2]/text()' % j)
             jg1 = ''.join(jg)
             list_jiage.append(jg1)
-        for n in range(1, 41):
+        for n in range(1, 21):
             cj = html.xpath('//*[@id="pro_list1"]/li[%d]/p[3]/text()' % n)
             cj1 = ''.join(cj)
             list_compamy.append(cj1)
-        for m in range(1, 41):
+        for m in range(1, 21):
             mz = html.xpath('//*[@id="pro_list1"]/li[%d]/p[1]/a/text()' % m)
             mz1 = ''.join(mz)
             list_mingzi.append(mz1)
-        for g in range(1, 41):
+        for g in range(1, 21):
             gg = html.xpath('//*[@id="pro_list1"]/li[%d]/p[4]/span/text()' % g)
             gg1 = ''.join(gg)
             list_guige.append(gg1)
-        for x in range(1, 41):
+        for x in range(1, 21):
             xq = html.xpath('//*[@id="pro_list1"]/li[%d]/p[6]/span[1]/i/text()' % x)
             xq1 = ''.join(xq)
             list_xiaoqi.append(xq1)

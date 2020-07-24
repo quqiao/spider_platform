@@ -12,7 +12,7 @@ list_compamy = []
 list_guige = []
 list_xiaoqi = []
 
-def crawl_longyi_tjzq(shuzi, count):
+def crawl_longyi_tjzq(shuzi1, count):
     executable_path = "C:/Users/Administrator/AppData/Local/Google/Chrome/Application/chromedriver.exe"
     driver = webdriver.Chrome(executable_path=executable_path)
     driver.get("http://www.longyiyy.com/login.html")
@@ -25,7 +25,7 @@ def crawl_longyi_tjzq(shuzi, count):
     driver.find_element_by_class_name('is').click()
     time.sleep(1)
     for i in range(1, count+1):
-        driver.get("http://www.longyiyy.com/events-filter-%d-%d-1.html" % (shuzi, i))
+        driver.get("http://www.longyiyy.com/events-filter-%d-%d-1.html" % (shuzi1, i))
         time.sleep(3)  # 停顿3秒等待页面加载完毕！！！（必须留有页面加载的时间，否则获得的源代码会不完整。）
         html_sourcode = driver.page_source
         html = etree.HTML(html_sourcode, etree.HTMLParser())
@@ -54,7 +54,7 @@ def crawl_longyi_tjzq(shuzi, count):
 """保存为csv格式文件"""
 def save_csv():
     dataframe = pd.DataFrame({'价格': list_jiage, '药名': list_mingzi, '厂家': list_compamy, '规格': list_guige, '效期': list_xiaoqi})  # 字典中的key值即为csv中列名
-    dataframe.to_csv("test-01.csv", index=False, sep=',')  # 将DataFrame存储为csv,index表示是否显示行名，default=True
+    dataframe.to_csv("longyi_tjzq.csv", index=False, sep=',')  # 将DataFrame存储为csv,index表示是否显示行名，default=True
 
 """存储到mysql数据库中"""
 def save_mysql():
@@ -81,7 +81,7 @@ def save_mysql():
                  VALUES
                  (%s,%s,%s,%s,%s)
                  """
-    for i in range(len(list_jiage)):
+    for i in range(len(list_mingzi)):
         cursor.execute(insert_sql, (list_mingzi[i], list_compamy[i], list_guige[i], list_xiaoqi[i], list_jiage[i]))
     conn.commit()
     cursor.close()
