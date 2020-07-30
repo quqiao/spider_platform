@@ -14,6 +14,13 @@ list_compamy = []
 list_guige = []
 list_xiaoqi = []
 
+def clear_list():
+    list_jiage.clear()
+    list_mingzi.clear()
+    list_compamy.clear()
+    list_guige.clear()
+    list_xiaoqi.clear()
+
 def crawl_hezongyy(count):
     executable_path = "C:/Users/Administrator/AppData/Local/Google/Chrome/Application/chromedriver.exe"
     driver = webdriver.Chrome(executable_path=executable_path)
@@ -22,7 +29,7 @@ def crawl_hezongyy(count):
     username = driver.find_element_by_name('user_name')
     password = driver.find_element_by_name('password')
     username.send_keys('测试05')
-    password.send_keys('123456')
+    password.send_keys('a123456')
     # 模拟点击“登录”按钮
     driver.find_element_by_class_name('login').click()
     time.sleep(1)

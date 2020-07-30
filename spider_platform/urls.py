@@ -36,9 +36,9 @@ urlpatterns = [
     url(r'^toast4/', views.toast4),
     url(r'^demo_css/', views.demo_css),
     url(r'^demo_js/', views.demo_js),
+    url(r'^demo_bootstrap/', views.demo_bootstrap),
     # url(r'^login', views.demo),
     re_path('submit/', include("target_page.urls")),
-
     # url(r'^qq/', views.test_qq),
     # url(r'^result/', views.result_qq),
 ]

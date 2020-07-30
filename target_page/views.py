@@ -7,7 +7,7 @@ from django.http import HttpResponse, HttpRequest
 from django.contrib import messages
 from django.template import TemplateDoesNotExist
 from selenium.common.exceptions import InvalidSelectorException
-
+import time
 from target_page.web_page import hezongyy_py, ysb_lyg, longyi_tjzq, longyi_yp, scjuchuang_py, ypzdw_jtj
 from target_page.models import hezongyy_py1, ysb_lyg1, longyi_tjzq1, longyi_yp1, scjuchuang_py1, ypzdw_jtj1
 import re
@@ -41,6 +41,7 @@ def index_result(request):
             shuzi = re.findall("\d+", r)
             shuzi1 = ''.join(shuzi)
             if "hezongyy.com/puyao" in r:   # 判断合纵药易购普药专区
+                hezongyy_py.clear_list()
                 hezongyy_py.crawl_hezongyy(int(c))  # 调用采集数据
                 hezongyy_py.save_mysql()  # 调用保存到数据库中
                 users = hezongyy_py1.objects.all()  # 数据库中读取数据
@@ -78,6 +79,8 @@ def index_result(request):
                 # users = ysb_lyg1.objects.all()  # 数据库中读取数据
                 # return render(request, 'ysb_lyg.html', {'users': users})
                 return HttpResponse("抓取结果：完成")
+            elif r == None or c == None:
+                return HttpResponseRedirect("/toast1")
             else:
                 return HttpResponseRedirect("/toast1")
         except (TypeError, ValueError):
@@ -101,7 +104,7 @@ def iframe(request):
         return HttpResponse(json.dumps(ret))
 
 def toast1(request):
-    messages.success(request, "暂时无法抓取该url,请返回重新输入！！！！！！")
+    messages.success(request, "输入为空或者暂时无法抓取,请返回重新输入！！！！！！")
     return render(request, 'toast1.html')
 
 def toast2(request):
@@ -121,3 +124,7 @@ def demo_css(request):
 
 def demo_js(request):
     return render(request, 'demo_js.html')
+
+def demo_bootstrap(request):
+    return render(request, 'demo_bootstrap.html')
+
