@@ -8,30 +8,12 @@ from django.contrib import messages
 from django.template import TemplateDoesNotExist
 from selenium.common.exceptions import InvalidSelectorException
 import time
-from target_page.web_page import hezongyy_py, ysb_lyg, longyi_tjzq, longyi_yp, scjuchuang_py, ypzdw_jtj
-from target_page.models import hezongyy_py1, ysb_lyg1, longyi_tjzq1, longyi_yp1, scjuchuang_py1, ypzdw_jtj1
+from platform1_0.web_page import hezongyy_py, ysb_lyg, longyi_tjzq, longyi_yp, scjuchuang_py, ypzdw_jtj
+from platform1_0.models import hezongyy_py1, ysb_lyg1, longyi_tjzq1, longyi_yp1, scjuchuang_py1, ypzdw_jtj1
 import re
 
-
-def home(request):
-    return render(request, 'home.html')
-
-def result_home(request):
-    if request.method == 'GET':
-        r = request.GET["empty"]
-        # html = etree.parse(r, etree.HTMLParser())
-        # result = etree.tostring(html)
-        # print(r)
-        # ssr = json.loads(r)
-        # print(ssr)
-        return HttpResponse(r)
-
-    else:
-        return render(request, 'index.html')
-
-
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'HomePage/index.html')
 
 def index_result(request):
     if request.method == 'GET':
@@ -90,41 +72,23 @@ def index_result(request):
         except TemplateDoesNotExist:
             return HttpResponseRedirect("/toast4")
     else:
-        render(request, 'index.html')
-
-def iframe(request):
-    if request.method == "GET":
-        return render(request, 'iframe.html')
-    elif request.method == "POST":
-        import time
-        time.sleep(3)
-        print(request.POST)
-        ret = {'code': True, 'data': request.POST.get('username')}
-        import json
-        return HttpResponse(json.dumps(ret))
+        render(request, 'HomePage/index.html')
 
 def toast1(request):
     messages.success(request, "输入为空或者暂时无法抓取,请返回重新输入！！！！！！")
-    return render(request, 'toast1.html')
+    return render(request, 'toast/toast1.html')
 
 def toast2(request):
     messages.success(request, "字符串没有转换成数字，请联系管理员解决！！！！！！")
-    return render(request, 'toast2.html')
+    return render(request, 'toast/toast2.html')
 
 def toast3(request):
     messages.success(request, "selenium出现问题，请联系管理员解决！！！！！！")
-    return render(request, 'toast3.html')
+    return render(request, 'toast/toast3.html')
 
 def toast4(request):
     messages.success(request, "Django出现问题，请联系管理员解决！！！！！！")
-    return render(request, 'toast4.html')
+    return render(request, 'toast/toast4.html')
 
-def demo_css(request):
-    return render(request, 'demo_css.html')
 
-def demo_js(request):
-    return render(request, 'demo_js.html')
-
-def demo_bootstrap(request):
-    return render(request, 'demo_bootstrap.html')
 
