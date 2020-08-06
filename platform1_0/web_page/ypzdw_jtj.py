@@ -12,6 +12,13 @@ list_compamy = []
 list_guige = []
 list_shangjia = []
 
+def clear_list():
+    list_jiage.clear()
+    list_mingzi.clear()
+    list_compamy.clear()
+    list_guige.clear()
+    list_shangjia.clear()
+
 def crawl_ypzdw_jtj(count):
     executable_path = "C:/Users/Administrator/AppData/Local/Google/Chrome/Application/chromedriver.exe"
     driver = webdriver.Chrome(executable_path=executable_path)

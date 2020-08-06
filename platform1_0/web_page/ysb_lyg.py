@@ -13,6 +13,12 @@ list_mingzi = []
 list_compamy = []
 list_xiaoqi = []
 
+def clear_list():
+    list_jiage.clear()
+    list_mingzi.clear()
+    list_compamy.clear()
+    list_xiaoqi.clear()
+
 def crawl_hezongyy(count):
     executable_path = "C:/Users/Administrator/AppData/Local/Google/Chrome/Application/chromedriver.exe"
     driver = webdriver.Chrome(executable_path=executable_path)

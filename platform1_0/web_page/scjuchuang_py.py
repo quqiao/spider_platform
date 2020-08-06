@@ -14,6 +14,15 @@ list_price1 = []
 list_price2 = []
 list_price3 = []
 
+def clear_list():
+    list_price1.clear()
+    list_price2.clear()
+    list_price3.clear()
+    list_mingzi.clear()
+    list_compamy.clear()
+    list_guige.clear()
+    list_xiaoqi.clear()
+
 def crawl_scjuchuan_py(count):
     executable_path = "C:/Users/Administrator/AppData/Local/Google/Chrome/Application/chromedriver.exe"
     driver = webdriver.Chrome(executable_path=executable_path)

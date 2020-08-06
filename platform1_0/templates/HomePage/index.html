@@ -30,13 +30,14 @@
 
   </style>
       <div id="test" style="display:none"  class="center-in-center">
-        爬取中,请耐心等待.......
+
         <div id="loading">
         </div>
+          爬取中,请耐心等待.......
       </div>
     <center id="all">
     <h1>欢迎使用爬虫采集器</h1>
-    <form action="/result_index" method="get">
+    <form action="/platform1/result_index" method="get">
     <input type="text" id="url" name="url" placeholder="请输入需要采集的网址"> *
     <input type="text" name="number"  placeholder="输入抓取的页数" onkeyup = "value=value.replace(/[^\d]/g,'')">*
     <input type="submit" value="提交" onclick="document.getElementById('test').style.display='';document.getElementById('all').style.display='none';">

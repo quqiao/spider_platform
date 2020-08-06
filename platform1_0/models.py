@@ -68,3 +68,14 @@ class ypzdw_jtj1(models.Model):
     class Meta:
         managed = True
         db_table = 'ypzdw_jtj'
+
+class scytyy_ypzq1(models.Model):
+    ID = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
+    name = models.CharField(max_length=100)
+    cj = models.CharField(max_length=100)
+    gg = models.CharField(max_length=100)
+    xq = models.CharField(max_length=100)
+    price = models.CharField(max_length=100)
+    class Meta:
+        managed = True
+        db_table = 'scytyy_ypzq'

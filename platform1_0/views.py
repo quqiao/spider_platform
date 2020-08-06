@@ -8,8 +8,8 @@ from django.contrib import messages
 from django.template import TemplateDoesNotExist
 from selenium.common.exceptions import InvalidSelectorException
 import time
-from platform1_0.web_page import hezongyy_py, ysb_lyg, longyi_tjzq, longyi_yp, scjuchuang_py, ypzdw_jtj
-from platform1_0.models import hezongyy_py1, ysb_lyg1, longyi_tjzq1, longyi_yp1, scjuchuang_py1, ypzdw_jtj1
+from platform1_0.web_page import hezongyy_py, ysb_lyg, longyi_tjzq, longyi_yp, scjuchuang_py, ypzdw_jtj, scytyy_ypzq
+from platform1_0.models import hezongyy_py1, ysb_lyg1, longyi_tjzq1, longyi_yp1, scjuchuang_py1, ypzdw_jtj1, scytyy_ypzq1
 import re
 
 def index(request):
@@ -55,6 +55,12 @@ def index_result(request):
                 users = scjuchuang_py1.objects.all()
                 return render(request, 'scjuchuang_py.html', {'users': users})
 
+            elif "http://www.scytyy.net/goods" in r:  # 判断四川粤通药品中心
+                scytyy_ypzq.crawl_scytyy_ypzq(int(c))
+                scytyy_ypzq.save_mysql()
+                users = scytyy_ypzq1.objects.all()
+                return render(request, 'scytyy_ypzq.html', {'users': users})
+
             elif r == "ysbang":
                 ysb_lyg.crawl_hezongyy(int(c))  # 调用采集数据
                 ysb_lyg.save_csv()  # 调用保存到数据库中
@@ -62,15 +68,15 @@ def index_result(request):
                 # return render(request, 'ysb_lyg.html', {'users': users})
                 return HttpResponse("抓取结果：完成")
             elif r == None or c == None:
-                return HttpResponseRedirect("/toast1")
+                return HttpResponseRedirect("/platform1/toast1")
             else:
-                return HttpResponseRedirect("/toast1")
+                return HttpResponseRedirect("/platform1/toast1")
         except (TypeError, ValueError):
-            return HttpResponseRedirect("/toast2")
+            return HttpResponseRedirect("/platform1/toast2")
         except InvalidSelectorException:
-            return HttpResponseRedirect("/toast3")
+            return HttpResponseRedirect("/platform1/toast3")
         except TemplateDoesNotExist:
-            return HttpResponseRedirect("/toast4")
+            return HttpResponseRedirect("/platform1/toast4")
     else:
         render(request, 'HomePage/index.html')
 
