@@ -6,8 +6,10 @@ __author__ = "quqiao"
 from django.urls import path, re_path, include  # Django版本2.0以上
 from platform1_0 import views
 from django.conf.urls import url  # Django2.0
+from django.contrib import admin
 
 urlpatterns = [
+    url(r'^admin/', admin.site.urls),
     path('index/', views.index),
     url(r'^result_index', views.index_result),
     url(r'^hezongyy_py/', views.index_result),

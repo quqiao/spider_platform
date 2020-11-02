@@ -12,73 +12,68 @@ list_mingzi = []
 list_compamy = []
 list_guige = []
 list_xiaoqi = []
-list_xiangou = []
+# list_xiangou = []
 
 def clear_list():
     list_jiage.clear()
+    list_jiage2.clear()
     list_mingzi.clear()
     list_compamy.clear()
     list_guige.clear()
     list_xiaoqi.clear()
-    list_xiangou.clear()
 
-def crawl_scytyy_ypzq():
+def crawl_huadingyyw_tjzq():
     executable_path = "C:/Users/Administrator/AppData/Local/Google/Chrome/Application/chromedriver.exe"
     driver = webdriver.Chrome(executable_path=executable_path)
-    driver.get("http://www.scytyy.net/login.html")
+    driver.get("http://www.huadingyyw.com/login.html")
     time.sleep(2)
-    username = driver.find_element_by_name('username')
-    password = driver.find_element_by_name('userpass')
-    username.send_keys('18030535053')
+    username = driver.find_element_by_class_name('iu.iua')
+    password = driver.find_element_by_class_name('iu.iub')
+    username.send_keys('13975255288')
     password.send_keys('123456')
-    # 模拟点击“登录”按钮2
+    # 模拟点击“登录”按钮
     driver.find_element_by_class_name('is').click()
     time.sleep(1)
-    for i in range(1, 36):
-        driver.get("http://www.scytyy.net/activity-big-672.html#area_1")
-        time.sleep(3)  # 停顿3秒等待页面加载完毕！！！（必须留有页面加载的时间，否则获得的源代码会不完整。）
+
+    for i in range(1, 273):
+        driver.get("http://www.huadingyyw.com/goods-filter-0,0,0,0,0,0,0,1,1-%d-0.html" % i)
+        time.sleep(2)  # 停顿3秒等待页面加载完毕！！！（必须留有页面加载的时间，否则获得的源代码会不完整。）
         html_sourcode = driver.page_source
-        print(html_sourcode)
         html = etree.HTML(html_sourcode, etree.HTMLParser())
-        for j in range(1, 31):
-            jg = html.xpath('//*[@id="area_1"]/ul/ul/li[%d]/div[2]/span[1]/text()' % j)
+        for j in range(1, 21):
+            jg = html.xpath('//*[@id="pro_list1"]/li[%d]/p[1]/span[1]/text()' % j)
             jg1 = ''.join(jg)
             list_jiage.append(jg1)
-        for j in range(1, 31):
-            jg2 = html.xpath('//*[@id="area_1"]/ul/ul/li[%d]/div[2]/span[3]/text()' % j)
+        for j in range(1, 21):
+            jg2 = html.xpath('//*[@id="pro_list1"]/li[%d]/p[1]/span[2]/text()' % j)
             jg3 = ''.join(jg2)
             list_jiage2.append(jg3)
-
-        for n in range(1, 31):
-            cj = html.xpath('//*[@id="area_1"]/ul/ul/li[%d]/div[4]/text()' % n)
+        for n in range(1, 21):
+            cj = html.xpath('//*[@id="pro_list1"]/li[%d]/p[3]/text()' % n)
             cj1 = ''.join(cj)
             list_compamy.append(cj1)
-        for m in range(1, 31):
-            mz = html.xpath('//*[@id="area_1"]/ul/ul/li[%d]/div[3]/text()' % m)
+        for m in range(1, 21):
+            mz = html.xpath('//*[@id="pro_list1"]/li[%d]/p[2]/a/text()' % m)
             mz1 = ''.join(mz)
             list_mingzi.append(mz1)
-        for g in range(1, 31):
-            gg = html.xpath('//*[@id="area_1"]/ul/ul/li[%d]/div[5]/text()' % g)
+        for g in range(1, 21):
+            gg = html.xpath('//*[@id="pro_list1"]/li[%d]/p[4]/text()' % g)
             gg1 = ''.join(gg)
             list_guige.append(gg1)
-        for x in range(1, 31):
-            xq = html.xpath('//*[@id="area_1"]/ul/ul/li[%d]/div[6]/span/text()' % x)
+        for x in range(1, 21):
+            xq = html.xpath('//*[@id="pro_list1"]/li[%d]/div[2]/div[1]/span/text()' % x)
             xq1 = ''.join(xq)
             list_xiaoqi.append(xq1)
-
-        for z in range(1, 31):
-            xg = html.xpath('//*[@id="area_1"]/ul/ul/li[%d]/div[7]/text()' % z)
-            xg1 = ''.join(xg)
-            list_xiangou.append(xg1)
-
-        time.sleep(5)
-        driver.find_element_by_xpath('//*[@id="pageBar"]/span[3]/a').click()
+        # for z in range(1, 21):
+        #     xg = html.xpath('/html/body/div[8]/div[4]/div/ul/li[%d]/p[5]/span[2]/text()' % z)
+        #     xg1 = ''.join(xg)
+        #     list_xiangou.append(xg1)
     driver.close()
 
 """保存为csv格式文件"""
 def save_csv():
-    dataframe = pd.DataFrame({'活动价': list_jiage, '券后价': list_jiage2, '药名': list_mingzi, '厂家': list_compamy, '规格': list_guige, '效期': list_xiaoqi, '限购': list_xiangou})  # 字典中的key值即为csv中列名
-    dataframe.to_csv("scytyy_tjzq_20201102.csv", index=False, sep=',')  # 将DataFrame存储为csv,index表示是否显示行名，default=True
+    dataframe = pd.DataFrame({'折后价': list_jiage, '原价': list_jiage2, '药名': list_mingzi, '厂家': list_compamy, '规格': list_guige, '效期': list_xiaoqi})  # 字典中的key值即为csv中列名
+    dataframe.to_csv("huadingyyw_tjzq_20201102.csv", index=False, sep=',')  # 将DataFrame存储为csv,index表示是否显示行名，default=True
 
 """存储到mysql数据库中"""
 def save_mysql():
@@ -112,6 +107,6 @@ def save_mysql():
     conn.close()
 
 if __name__ == '__main__':# 验证拼接后的正确性
-    print(crawl_scytyy_ypzq())
-    print(save_csv())
+    crawl_huadingyyw_tjzq()
+    save_csv()
     # print(crawl_scytyy())

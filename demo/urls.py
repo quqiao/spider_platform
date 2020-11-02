@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^demo_css/', views.demo_css),
     url(r'^demo_js/', views.demo_js),
     url(r'^demo_bootstrap/', views.demo_bootstrap),
+    path("archive/<year>/<month>.html", views.archive),
     ]
