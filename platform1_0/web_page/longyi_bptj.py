@@ -36,7 +36,7 @@ def crawl_longyi_tjbp():
     driver.get("http://activity.longyiyy.com/eleven/tjzq/58,59,60,52/58")
     time.sleep(3)
     # driver.find_element_by_xpath('//*[@id="app"]/div[1]/div[2]/img').click()
-    for i in range(1, 49):
+    for i in range(1, 46):
         time.sleep(6)  # 停顿3秒等待页面加载完毕！！！（必须留有页面加载的时间，否则获得的源代码会不完整。）
         html_sourcode = driver.page_source
         html = etree.HTML(html_sourcode, etree.HTMLParser())
@@ -78,7 +78,7 @@ def crawl_longyi_tjbp():
 """保存为csv格式文件"""
 def save_csv():
     dataframe = pd.DataFrame({'特价': list_jiage2, '券后折扣价': list_jiage, '药名': list_mingzi, '厂家': list_compamy, '规格': list_guige, '效期': list_xiaoqi, '限购': list_xiangou})  # 字典中的key值即为csv中列名
-    dataframe.to_csv("longyi_tjbp_20201102_xiangou.csv", index=False, sep=',')  # 将DataFrame存储为csv,index表示是否显示行名，default=True
+    dataframe.to_csv("longyi_tjbp_20201103.csv", index=False, sep=',')  # 将DataFrame存储为csv,index表示是否显示行名，default=True
 
 # """存储到mysql数据库中"""
 # def save_mysql():

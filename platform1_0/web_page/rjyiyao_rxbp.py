@@ -25,55 +25,55 @@ def clear_list():
 def crawl_longyi_tjzq_pt():
     executable_path = "C:/Users/Administrator/AppData/Local/Google/Chrome/Application/chromedriver.exe"
     driver = webdriver.Chrome(executable_path=executable_path)
-    driver.get("https://www.scjuchuang.com/login")
+    driver.get("http://new.rjyiyao.com/web/login")
     time.sleep(2)
-    username = driver.find_element_by_class_name('loginName')
-    password = driver.find_element_by_class_name('loginPassword')
-    username.send_keys('15281084407')
-    password.send_keys('a123456')
+    username = driver.find_element_by_id('username')
+    password = driver.find_element_by_id('password')
+    username.send_keys('18030535053')
+    password.send_keys('123456')
     # 模拟点击“登录”按钮
-    driver.find_element_by_class_name('loginBtn').click()
-    time.sleep(1)
+    driver.find_element_by_id('btnLogin').click()
+    time.sleep(3)
 
-    for i in range(1, 33):
-        driver.get("https://www.scjuchuang.com/newTemplate?theme=3&group_id=2566&isset_cart=&id=115&order_type=&order=&activity_type=1&page=%d" % i)
+    for i in range(1, 81):
+        driver.get("http://new.rjyiyao.com/web/product/sale/2?page=%d" % i)
         time.sleep(3)  # 停顿3秒等待页面加载完毕！！！（必须留有页面加载的时间，否则获得的源代码会不完整。）
         html_sourcode = driver.page_source
         html = etree.HTML(html_sourcode, etree.HTMLParser())
-        for j in range(1, 21):
-            jg = html.xpath('/html/body/div[9]/div[4]/div/ul/li[%d]/div[2]/span[1]/text()' % j)
+        for j in range(1, 41):
+            jg = html.xpath('//*[@id="pageContent"]/div/div[%d]/h2/span[2]/text()' % j)
             jg1 = ''.join(jg)
             list_jiage.append(jg1)
-        for j in range(1, 21):
-            jg2 = html.xpath('/html/body/div[9]/div[4]/div/ul/li[%d]/div[2]/span[2]/text()' % j)
+        for j in range(1, 41):
+            jg2 = html.xpath('//*[@id="pageContent"]/div/div[%d]/h2/span[1]/text()' % j)
             jg3 = ''.join(jg2)
             list_jiage2.append(jg3)
-        for n in range(1, 21):
-            cj = html.xpath('/html/body/div[9]/div[4]/div/ul/li[%d]/p[1]/text()' % n)
+        for n in range(1, 41):
+            cj = html.xpath('//*[@id="pageContent"]/div/div[%d]/p/text()' % n)
             cj1 = ''.join(cj)
             list_compamy.append(cj1)
-        for m in range(1, 21):
-            mz = html.xpath('/html/body/div[9]/div[4]/div/ul/li[%d]/div[4]/text()' % m)
+        for m in range(1, 41):
+            mz = html.xpath('//*[@id="pageContent"]/div/div[%d]/h1/text()' % m)
             mz1 = ''.join(mz)
             list_mingzi.append(mz1)
-        for g in range(1, 21):
-            gg = html.xpath('/html/body/div[9]/div[4]/div/ul/li[%d]/p[2]/text()' % g)
+        for g in range(1, 41):
+            gg = html.xpath('//*[@id="pageContent"]/div/div[%d]/section[1]/p[1]/text()' % g)
             gg1 = ''.join(gg)
             list_guige.append(gg1)
-        for x in range(1, 21):
-            xq = html.xpath('/html/body/div[9]/div[4]/div/ul/li[%d]/p[3]/span[1]/text()' % x)
+        for x in range(1, 41):
+            xq = html.xpath('//*[@id="pageContent"]/div/div[%d]/section[2]/p[1]/text()' % x)
             xq1 = ''.join(xq)
             list_xiaoqi.append(xq1)
-        for z in range(1, 21):
-            xg = html.xpath('/html/body/div[9]/div[4]/div/ul/li[%d]/p[5]/span[2]/text()' % z)
-            xg1 = ''.join(xg)
-            list_xiangou.append(xg1)
+        # for z in range(1, 21):
+        #     xg = html.xpath('/html/body/div[9]/div[4]/div/ul/li[%d]/p[5]/span[2]/text()' % z)
+        #     xg1 = ''.join(xg)
+        #     list_xiangou.append(xg1)
     driver.close()
 
 """保存为csv格式文件"""
 def save_csv():
-    dataframe = pd.DataFrame({'特价': list_jiage, '原价': list_jiage2, '药名': list_mingzi, '厂家': list_compamy, '规格': list_guige, '效期': list_xiaoqi, '限购': list_xiangou})  # 字典中的key值即为csv中列名
-    dataframe.to_csv("scjuchuang_bptj_20201103.csv", index=False, sep=',')  # 将DataFrame存储为csv,index表示是否显示行名，default=True
+    dataframe = pd.DataFrame({'特价': list_jiage, '原价': list_jiage2, '药名': list_mingzi, '厂家': list_compamy, '规格': list_guige, '效期': list_xiaoqi})  # 字典中的key值即为csv中列名
+    dataframe.to_csv("rjyiyao_rxbp_20201105.csv", index=False, sep=',')  # 将DataFrame存储为csv,index表示是否显示行名，default=True
 
 """存储到mysql数据库中"""
 def save_mysql():
