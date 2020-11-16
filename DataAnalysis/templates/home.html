@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据分析页面</title>
+</head>
+<body>
+  <style>
+    #loading {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #eee;
+      border-left-color: #e27a61;
+      border-radius: 50%;
+      animation: loading-animate 1s linear infinite;
+    }
+    @keyframes loading-animate {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    .center-in-center{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+        }
+
+  </style>
+    <center id="all">
+    <h1>数据分析</h1>
+    <form action="/platform1/result_index" method="get">
+    <input type="text" id="url" name="url" placeholder="请输入药品名称"> *
+    <input type="submit" value="提交" onclick="">
+
+    </form>
+    </center>
+</body>
+</html>

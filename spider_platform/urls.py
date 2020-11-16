@@ -23,5 +23,6 @@ urlpatterns = [
     re_path('platform1/', include("platform1_0.urls")),
     re_path('platform2/', include("platform2_0.urls")),
     re_path('demo/', include("demo.urls")),
+    re_path('DataAnalysis/', include("DataAnalysis.urls")),
 
 ]

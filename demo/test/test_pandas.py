@@ -8,7 +8,7 @@ import pandas as pd
 # print(s)
 # print(s.index)
 
-s2 = Series(['wangxing','man', 24], index=['name','sex','age'])
+s2 = Series(['wangxing', 'man', 24], index=['name', 'sex', 'age'])
 # print(s2)
 # print(s2['name'])
 # s2['name'] = 'weiwei'
@@ -40,7 +40,31 @@ newData = {'lang': {'first': 'python', 'second': 'java'}, 'price': {'first': 500
 # f4 = pd.DataFrame(newData)
 # print(f4)
 
-io = r'hezongyy_20201111.xls'
-data = pd.read_excel(io, sheet_name=0)
-# pd = data.head()
-print(data)
+# pandas读取excel文件
+io = r'medical_data_demo.xls'
+# data = pd.read_excel(io, sheet_name='龙一', index_col='药名')
+# print(data)
+
+# 查询某行数据
+# data = pd.read_excel(io, sheet_name='华鼎', index_col='药名')
+# print(data.loc['感冒灵颗粒'])
+
+# 查询几个列表中同一个药品资料
+try:
+    data = pd.read_excel(io, sheet_name='龙一', index_col='药名')
+    print(data.loc['感冒灵颗粒'])
+    data = pd.read_excel(io, sheet_name='合纵', index_col='药名')
+    print(data.loc['感冒灵颗粒'])
+    data = pd.read_excel(io, sheet_name='聚创', index_col='药名')
+    print(data.loc['感冒灵颗粒'])
+    data = pd.read_excel(io, sheet_name='华鼎', index_col='药名')
+    print(data.loc['感冒灵颗粒'])
+    data = pd.read_excel(io, sheet_name='蓉锦', index_col='药名')
+    print(data.loc['感冒灵颗粒'])
+    data = pd.read_excel(io, sheet_name='粤通', index_col='药名')
+    print(data.loc['感冒灵颗粒'])
+except KeyError:
+    print('该数据为空')
+
+
+
