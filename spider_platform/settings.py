@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'platform1_0',
     'platform2_0',
-    'demo'
+    'demo',
+    'DataAnalysis'
 ]
 
 MIDDLEWARE = [

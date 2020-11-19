@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpRequest
 # Create your views here.
 
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'data_home.html')
 
 def result_home(request):
     if request.method == 'GET':
@@ -16,7 +16,7 @@ def result_home(request):
         return HttpResponse(r)
 
     else:
-        return render(request, 'home.html')
+        return render(request, 'data_home.html')
 
 def iframe(request):
     if request.method == "GET":

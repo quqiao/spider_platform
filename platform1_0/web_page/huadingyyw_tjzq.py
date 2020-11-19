@@ -72,7 +72,7 @@ def crawl_huadingyyw_tjzq():
 
 """保存为csv格式文件"""
 def save_csv():
-    dataframe = pd.DataFrame({'折后价': list_jiage, '原价': list_jiage2, '药名': list_mingzi, '厂家': list_compamy, '规格': list_guige, '效期': list_xiaoqi})  # 字典中的key值即为csv中列名
+    dataframe = pd.DataFrame({'原价': list_jiage2, '折后价': list_jiage, '药名': list_mingzi, '厂家': list_compamy, '规格': list_guige, '效期': list_xiaoqi})  # 字典中的key值即为csv中列名
     dataframe.to_csv("huadingyyw_tjzq_20201102.csv", index=False, sep=',')  # 将DataFrame存储为csv,index表示是否显示行名，default=True
 
 """存储到mysql数据库中"""

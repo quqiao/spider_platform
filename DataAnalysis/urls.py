@@ -6,4 +6,5 @@ urlpatterns = [
     # iframe
     # re_path('iframe/', views.iframe),
     url(r'^home/', views.home),
+    url(r'^result_data', views.index_result),
     ]

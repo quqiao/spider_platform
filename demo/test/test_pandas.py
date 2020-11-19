@@ -41,7 +41,7 @@ newData = {'lang': {'first': 'python', 'second': 'java'}, 'price': {'first': 500
 # print(f4)
 
 # pandas读取excel文件
-io = r'medical_data_demo.xls'
+io = r'medical_data_20201109.xlsx'
 # data = pd.read_excel(io, sheet_name='龙一', index_col='药名')
 # print(data)
 
@@ -50,21 +50,38 @@ io = r'medical_data_demo.xls'
 # print(data.loc['感冒灵颗粒'])
 
 # 查询几个列表中同一个药品资料
+# try:
+#     data = pd.read_excel(io, sheet_name='龙一', index_col='药名')
+#     ss = dict(data.loc['感冒灵颗粒'])
+#     print(ss)
+# except KeyError:
+#     print('该数据为空')
 try:
-    data = pd.read_excel(io, sheet_name='龙一', index_col='药名')
-    print(data.loc['感冒灵颗粒'])
     data = pd.read_excel(io, sheet_name='合纵', index_col='药名')
-    print(data.loc['感冒灵颗粒'])
-    data = pd.read_excel(io, sheet_name='聚创', index_col='药名')
-    print(data.loc['感冒灵颗粒'])
-    data = pd.read_excel(io, sheet_name='华鼎', index_col='药名')
-    print(data.loc['感冒灵颗粒'])
-    data = pd.read_excel(io, sheet_name='蓉锦', index_col='药名')
-    print(data.loc['感冒灵颗粒'])
-    data = pd.read_excel(io, sheet_name='粤通', index_col='药名')
-    print(data.loc['感冒灵颗粒'])
+    print(dict(data.loc['足光散']))
 except KeyError:
     print('该数据为空')
+# try:
+#     data = pd.read_excel(io, sheet_name='聚创', index_col='药名')
+#     print(data.loc['感冒灵颗粒'])
+# except KeyError:
+#     print('该数据为空')
+# try:
+#     data = pd.read_excel(io, sheet_name='华鼎', index_col='药名')
+#     print(dict(data.loc['感冒灵颗粒']))
+# except KeyError:
+#     print('该数据为空')
+try:
+    data = pd.read_excel(io, sheet_name='蓉锦', index_col='药名')
+    print(dict(data.loc['感冒灵颗粒']))
+except KeyError:
+    print('该数据为空')
+# try:
+#     data = pd.read_excel(io, sheet_name='粤通', index_col='药名')
+#     print(data.loc['感冒灵颗粒'])
+# except KeyError:
+#     print('该数据为空')
+
 
 
 

@@ -1,15 +1,13 @@
 # from django.shortcuts import render
 #
 # # Create your views here.
-import requests
-from django.shortcuts import render, reverse, redirect, HttpResponseRedirect
-from django.http import HttpResponse, HttpRequest
+from django.shortcuts import render, HttpResponseRedirect
+from django.http import HttpResponse
 from django.contrib import messages
 from django.template import TemplateDoesNotExist
 from selenium.common.exceptions import InvalidSelectorException
-import time
-from platform1_0.web_page import hezongyy_py, ysb_lyg, longyi_tjzq, longyi_yp, scjuchuang_py, ypzdw_jtj, scytyy_ypzq
-from platform1_0.models import hezongyy_py1, ysb_lyg1, longyi_tjzq1, longyi_yp1, scjuchuang_py1, ypzdw_jtj1, scytyy_ypzq1
+from platform1_0.web_page import ysb_lyg, longyi_tjzq, longyi_yp, scjuchuang_py, ypzdw_jtj, scytyy_ypzq, hezongyy_py
+from platform1_0.models import hezongyy_py1, longyi_yp1, scjuchuang_py1, ypzdw_jtj1, scytyy_ypzq1
 import re
 
 def index(request):
