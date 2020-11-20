@@ -26,7 +26,7 @@
 	<input type="button" onclick="tableToExcel('tables', 'name', 'myfile.xls')" value="导出以下数据(excel)">
 
 <table class="table tableStyles" id="tables">
-    <caption>爬取数据统计表</caption><!--可以生成表格的标题-->
+    <caption>药品名：{{name}}</caption><!--可以生成表格的标题-->
 
     <tbody>
 
@@ -40,72 +40,109 @@
 <!--    </thead>-->
 
     <tr>
-        <td></td><td>合纵</td>
+        <th>合纵</th>
         <td>
-        {% for m1,n1 in data1.items %}
-            <tr>
-            <th>{{m1}}</th>
-            {% for k1,j1 in n1.items %}
-            <td>{{j1}}</td>
+            {% for m1,n1 in data1.items %}
+                <tr>
+                    <td>{{m1}}</td>
+                    {% if n1.items == None %}
+
+                        <td>{{n1}}</td>
+                    {% else %}
+                        {% for k1,j1 in n1.items %}
+                            <td>{{j1}}</td>
+                        {% endfor %}
+                    {% endif %}
+                </tr>
             {% endfor %}
-            </tr>
-        {% endfor %}
         </td>
     </tr>
 
-
+    <td></td><tr></tr><td></td>
     <tr>
-        <td>龙一</td>
+        <th>龙一</th>
         <td>
-        {% for m2,n2 in data2.items %}
-            <tr>
-            <th>{{m2}}</th>
-            {% for k2,j2 in n2.items %}
-            <td>{{j2}}</td>
+            {% for m2,n2 in data2.items %}
+                <tr>
+                    <td>{{m2}}</td>
+                    {% if n2.items == None %}
+                        <td>{{n2}}</td>
+                    {% else %}
+                        {% for k2,j2 in n2.items %}
+                            <td>{{j2}}</td>
+                        {% endfor %}
+                    {% endif %}
+                </tr>
             {% endfor %}
-            </tr>
-        {% endfor %}
         </td>
     </tr>
 
+    <td></td><tr></tr><td></td>
     <tr>
-        <td>蓉锦</td>
-        {% for m3,n3 in data3.items %}
-        <tr>
-        <td>{{m3}}</td>
-            {% for k3,j3 in n3.items %}
-            <td>{{j3}}</td>
+        <th>蓉锦</th>
+            {% for m3,n3 in data3.items %}
+                <tr>
+                    <td>{{m3}}</td>
+                    {% if n3.items == None %}
+                        <td>{{n3}}</td>
+                    {% else %}
+                        {% for k3,j3 in n3.items %}
+                            <td>{{j3}}</td>
+                        {% endfor %}
+                    {% endif %}
+                </tr>
             {% endfor %}
-        </tr>
-        {% endfor %}
     </tr>
 
+    <td></td><tr></tr><td></td>
     <tr>
-        <td></td><td>华鼎</td>
-        <td>
-        {% for m4,n4 in data4.items %}
+        <th>华鼎</th>
+            {% for m4,n4 in data4.items %}
             <tr>
-            <th>{{m4}}</th>
-            {% for k4,j4 in n4.items %}
-            <td>{{j4}}</td>
-            {% endfor %}
+                <td>{{m4}}</td>
+                {% if n4.items == None %}
+                    <td>{{n4}}</td>
+                {% else %}
+                    {% for k4,j4 in n4.items %}
+                        <td>{{j4}}</td>
+                    {% endfor %}
+                {% endif %}
             </tr>
         {% endfor %}
-        </td>
     </tr>
 
+    <td></td><tr></tr><td></td>
     <tr>
-        <td>聚创</td>
-        {% for m5,n5 in data5.items %}
-        <td>{{n5}}</td>
-        {% endfor %}
+        <th>聚创</th>
+            {% for m5,n5 in data5.items %}
+                <tr>
+                    <td>{{m5}}</td>
+                    {% if n5.items == None %}
+                        <td>{{n5}}</td>
+                    {% else %}
+                        {% for k5, j5 in n5.items %}
+                            <td>{{j5}}</td>
+                        {% endfor %}
+                    {% endif %}
+                </tr>
+            {% endfor %}
     </tr>
 
+    <td></td><tr></tr><td></td>
     <tr>
-        <td>粤通</td>
-        {% for m6,n6 in data6.items %}
-        <td>{{n6}}</td>
-        {% endfor %}
+        <th>粤通</th>
+            {% for m6,n6 in data6.items %}
+            <tr>
+                <td>{{m6}}</td>
+                {% if n6.items == None %}
+                    <td>{{n6}}</td>
+                {% else %}
+                    {% for k6, j6 in n6.items %}
+                        <td>{{j6}}</td>
+                    {% endfor %}
+                {% endif %}
+            </tr>
+            {% endfor %}
     </tr>
 
     </tbody>

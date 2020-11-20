@@ -40,5 +40,5 @@ def index_result(request):
             data_yt = dict(pandasData1.loc[r])
         except KeyError:
             data_yt = '暂无该药品'
-        return render(request, 'DataResult.html', {'data1': data_hz, 'data2': data_ly, 'data3': data_rj,
+        return render(request, 'DataResult.html', {'name': r, 'data1': data_hz, 'data2': data_ly, 'data3': data_rj,
                                                    'data4': data_hd, 'data5': data_jc, 'data6': data_yt})
