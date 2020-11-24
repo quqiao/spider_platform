@@ -1,6 +1,6 @@
 import xlrd
 import xlwt
-# from xlutils.copy import copy #暂时用不上
+from xlutils.copy import copy #暂时用不上
 import os
 
 l_p = []  # 定义两个全局list，分别存储原始和目的需要对比的数据
