@@ -8,15 +8,15 @@ l_t = []
 
 
 def read_excel():
-    wb_pri = xlrd.open_workbook('F:\django\spider_platform\platform1_0\web_page\scytyy_tjzq_20201102.xlsx')  # 打开原始文件
-    wb_tar = xlrd.open_workbook('F:\django\spider_platform\platform1_0\web_page\scytyy_tjzq_20201103.xlsx')  # 打开目标文件
+    wb_pri = xlrd.open_workbook('F:\Temp\pertest1.xlsx')  # 打开原始文件
+    wb_tar = xlrd.open_workbook('F:\Temp\pertest2.xlsx')  # 打开目标文件
     wb_result = xlwt.Workbook()  # 新建一个文件，用来保存结果
     sheet_result = wb_result.add_sheet('result', cell_overwrite_ok=True)
     result_i = 0
     result_j = 0
     # for sheet_i in range(1, 2):
-    sheet_pri = wb_pri.sheet_by_name("1102")  # 通过index获取每个sheet，为了省心，我根据自己的需要限定为第2-21个sheet
-    sheet_tar = wb_tar.sheet_by_name("1103")
+    sheet_pri = wb_pri.sheet_by_name("test01")  # 通过index获取每个sheet，为了省心，我根据自己的需要限定为第2-21个sheet
+    sheet_tar = wb_tar.sheet_by_name("test02")
     # sheet_backup = wb_backup.get_sheet(sheet_i)
     print(sheet_pri.name, sheet_tar.name)
     # 为什么是取这一列，因为这就是需要对比的数据阿
@@ -43,7 +43,6 @@ def read_excel():
         sheet_result.write(result_j, 3, td_i)
     # 好了，可以去名为result的excel中查看结果了
     wb_result.save('result.xls')
-
 
 if __name__ == '__main__':
     read_excel()

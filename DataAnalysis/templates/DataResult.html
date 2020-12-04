@@ -43,10 +43,10 @@
         <th>合纵</th>
         <td>
             {% for m1,n1 in data1.items %}
+<!--            django标签：执行循环取对应的key，value值对应endif结束-->
                 <tr>
                     <td>{{m1}}</td>
                     {% if n1.items == None %}
-
                         <td>{{n1}}</td>
                     {% else %}
                         {% for k1,j1 in n1.items %}

@@ -14,5 +14,3 @@ print(time.gmtime(os.path.getmtime(files)))  # 以struct_time形式输出最近�
 print(os.path.getsize(files))  # 输出文件大小
 print(os.path.abspath(files))  # 输出绝对路径
 print(os.path.normpath(files))  # 规范path字符串形式
-
-
