@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>数据分析展示页面</title>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=webkit">
+    <style type="text/css">
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        h1{
+            text-align: center;
+            margin: 20px 0;
+        }
+        input{
+            width: 200px;
+            height: 30px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .w100{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        .newTable>h3{
+            text-align: center;
+            margin: 20px 0;
+        }
+        .newTable>.companyBox{
+            margin:20px auto;
+            width: 1200px;
+        }
+        .newTable>.companyBox>.companyName{
+            height: 40px;
+            font-size: 22px;
+            color: #333;
+            font-weight: bold;
+        }
+        .newTable>.companyBox>.goodsInfo{
+            border:1px solid #EBEEF5;
+            border-bottom:none;
+        }
+        .newTable>.companyBox>.goodsInfo>.goodsTitle,.goodsList{
+
+            background-color: #f8f8f8;
+            min-height: 68px;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            border-bottom:1px solid #EBEEF5;
+        }
+        .goodsList{background-color: #fff;
+                    }
+
+        .newTable>.companyBox>.goodsInfo>.goodsTitle>li{
+            width: 100px;
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+        }
+        .newTable>.companyBox>.goodsInfo>.goodsList>li{
+            color: #333;
+            width: 80px;
+            text-align: center;
+            font-size: 14px;
+            border-right:1px solid #EBEEF5;
+            min-height: 68px;
+            padding:0 10px
+        }
+    </style>
+</head>
+
+<body>
+    <h1>数据展示</h1>
+    <!--	<p>1.只在谷歌/火狐下起作用，保留单元格合并的效果,下载之后的命名是:xxx.xls</p>-->
+    <a id="dlink" style="display:none;"></a>
+    <div class="w100">
+        <input type="button" onclick="tableToExcel('tables', 'name', 'myfile.xls')" value="导出以下数据(excel)">
+    </div>
+
+    <div class="newTable" id="tables">
+        <h3>药品名：{{name}}</h3>
+        <h3>爬取时间：{{time}}</h3>
+        <div class="companyBox">
+            <div class="companyName">合纵</div>
+            <div class="goodsInfo">
+                {% for m1,n1 in data1.items %}
+                <ul class="goodsTitle">
+                    <li>{{m1}}</li>
+                    {% if n1.items == None %}
+                        <li>{{n1}}</li>
+                    {% else %}
+                </ul>
+                        <ul class="goodsList">
+                        {% for k1,j1 in n1.items %}
+                        <li>{{j1}}</li>
+                        {% endfor %}
+                    {% endif %}
+                        </ul>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="companyBox">
+            <div class="companyName">龙一</div>
+            <div class="goodsInfo">
+                {% for m2,n2 in data2.items %}
+                <ul class="goodsTitle">
+                    <li>{{m2}}</li>
+                    {% if n2.items == None %}
+                        <li>{{n2}}</li>
+                    {% else %}
+                </ul>
+                        <ul class="goodsList">
+                        {% for k2,j2 in n2.items %}
+                        <li>{{j2}}</li>
+                        {% endfor %}
+                    {% endif %}
+                        </ul>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="companyBox">
+            <div class="companyName">蓉锦</div>
+            <div class="goodsInfo">
+                {% for m3,n3 in data3.items %}
+                <ul class="goodsTitle">
+                    <li>{{m3}}</li>
+                    {% if n3.items == None %}
+                        <li>{{n3}}</li>
+                    {% else %}
+                </ul>
+                        <ul class="goodsList">
+                        {% for k3,j3 in n3.items %}
+                        <li>{{j3}}</li>
+                        {% endfor %}
+                    {% endif %}
+                        </ul>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="companyBox">
+            <div class="companyName">华鼎</div>
+            <div class="goodsInfo">
+                {% for m4,n4 in data4.items %}
+                <ul class="goodsTitle">
+                    <li>{{m4}}</li>
+                    {% if n4.items == None %}
+                        <li>{{n4}}</li>
+                    {% else %}
+                </ul>
+                        <ul class="goodsList">
+                        {% for k4,j4 in n4.items %}
+                        <li>{{j4}}</li>
+                        {% endfor %}
+                    {% endif %}
+                        </ul>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="companyBox">
+            <div class="companyName">聚创</div>
+            <div class="goodsInfo">
+                {% for m5,n5 in data5.items %}
+                <ul class="goodsTitle">
+                    <li>{{m5}}</li>
+                    {% if n5.items == None %}
+                        <li>{{n5}}</li>
+                    {% else %}
+                </ul>
+                        <ul class="goodsList">
+                        {% for k5,j5 in n5.items %}
+                        <li>{{j5}}</li>
+                        {% endfor %}
+                    {% endif %}
+                        </ul>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="companyBox">
+            <div class="companyName">粤通</div>
+            <div class="goodsInfo">
+                {% for m6,n6 in data6.items %}
+                <ul class="goodsTitle">
+                    <li>{{m6}}</li>
+                    {% if n6.items == None %}
+                        <li>{{n6}}</li>
+                    {% else %}
+                </ul>
+                        <ul class="goodsList">
+                        {% for k6,j6 in n6.items %}
+                        <li>{{j6}}</li>
+                        {% endfor %}
+                    {% endif %}
+                        </ul>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var tableToExcel = (function () {
+            var uri = 'data:application/vnd.ms-excel;base64,',
+                template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>',
+                base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) },
+                format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) };
+            return function (table, name, filename) {
+                if (!table.nodeType) table = document.getElementById(table)
+                var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+                document.getElementById("dlink").href = uri + base64(format(template, ctx));
+                document.getElementById("dlink").download = filename;
+                document.getElementById("dlink").click();
+            }
+        })()
+    </script>
+</body>
+
+</html>

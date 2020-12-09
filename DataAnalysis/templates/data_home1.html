@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>数据分析页面</title>
+</head>
+
+<body>
+  <style>
+    #loading {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #eee;
+      border-left-color: #e27a61;
+      border-radius: 50%;
+      animation: loading-animate 1s linear infinite;
+    }
+
+    @keyframes loading-animate {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .center-in-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+    }
+
+    input {
+      height: 40px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      display: block;
+      width: 300px;
+      margin-bottom: 20px;
+    }
+    input[type=text]:focus {
+      border: 1px solid #3DBB2B;
+      outline: none;/*去掉默认input焦点边框*/
+    }
+    .btn{
+      cursor: pointer;
+    }
+  </style>
+  <center id="all">
+    <h1>数据分析</h1>
+    <form action="/DataAnalysis/result_data" method="get">
+      <input type="text" id="name" name="name" placeholder="请输入完整的药品名称">
+      <input type="text" id="time" name="time" placeholder="输入爬取时间如：20201101">
+      <input type="submit" value="提交" onclick="" class="btn">
+    </form>
+  </center>
+</body>
+
+</html>

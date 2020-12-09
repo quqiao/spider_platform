@@ -5,7 +5,7 @@ from django.shortcuts import render, HttpResponseRedirect
 # Create your views here.
 
 def home(request):
-    return render(request, 'data_home.html')
+    return render(request, 'data_home1.html')
 
 def index_result(request):
     if request.method == 'GET':
@@ -43,9 +43,9 @@ def index_result(request):
                 data_yt = dict(pandasData1.loc[r])
             except KeyError:
                 data_yt = '暂无该药品'
-            return render(request, 'DataResult.html', {'name': r, 'time': t, 'data1': data_hz, 'data2': data_ly, 'data3': data_rj,
+            return render(request, 'DataResult1.html', {'name': r, 'time': t, 'data1': data_hz, 'data2': data_ly, 'data3': data_rj,
                                                        'data4': data_hd, 'data5': data_jc, 'data6': data_yt})
-        except 	FileNotFoundError:
+        except FileNotFoundError:
             return HttpResponseRedirect("/DataAnalysis/toast1")
 
 
