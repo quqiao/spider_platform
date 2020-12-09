@@ -56,11 +56,11 @@ io = r'medical_data_20201109.xlsx'
 #     print(ss)
 # except KeyError:
 #     print('该数据为空')
-try:
-    data = pd.read_excel(io, sheet_name='合纵', index_col='药名')
-    print(dict(data.loc['足光散']))
-except KeyError:
-    print('该数据为空')
+# try:
+#     data = pd.read_excel(io, sheet_name='合纵', index_col='药名')
+#     print(dict(data.loc['足光散']))
+# except KeyError:
+#     print('该数据为空')
 # try:
 #     data = pd.read_excel(io, sheet_name='聚创', index_col='药名')
 #     print(data.loc['感冒灵颗粒'])

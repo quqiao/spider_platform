@@ -27,6 +27,7 @@
 
 <table class="table tableStyles" id="tables">
     <caption>药品名：{{name}}</caption><!--可以生成表格的标题-->
+    <caption>爬取时间：{{time}}</caption>
 
     <tbody>
 
@@ -46,11 +47,13 @@
 <!--            django标签：执行循环取对应的key，value值对应endif结束-->
                 <tr>
                     <td>{{m1}}</td>
+<!--                    取原价，特价，厂家，规格，效期等字段-->
                     {% if n1.items == None %}
-                        <td>{{n1}}</td>
+<!--                        <td>{{n1}}</td>-->
                     {% else %}
                         {% for k1,j1 in n1.items %}
                             <td>{{j1}}</td>
+<!--                            取m对应的value值-->
                         {% endfor %}
                     {% endif %}
                 </tr>

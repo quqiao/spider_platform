@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>selenium错误提示</title>
+</head>
+<body>
+<!--<p>请输入你的QQ号</p>-->
+
+<!--<form action="/result" method="get">-->
+<!--    qq: <input type="text" name="q"> <br>-->
+<!--    <br>-->
+<!--    <input type="submit" value="提交">-->
+<!--</form>-->
+
+{% if messages %}
+        <script>
+            {% for msg in messages %}
+                alert('{{ msg.message }}');
+            {% endfor %}
+        </script>
+    {% endif %}
+
+</body>
+</html>
