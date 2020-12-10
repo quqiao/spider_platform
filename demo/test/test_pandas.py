@@ -72,8 +72,15 @@ io = r'medical_data_20201109.xlsx'
 # except KeyError:
 #     print('该数据为空')
 try:
-    data = pd.read_excel(io, sheet_name='蓉锦', index_col='药名')
-    print(dict(data.loc['感冒灵颗粒']))
+    data1 = pd.read_excel(io, sheet_name='蓉锦', index_col='药名')
+    data2 = pd.read_excel(io, sheet_name='蓉锦', index_col='厂家')
+    data3 = pd.read_excel(io, sheet_name='蓉锦', index_col=[2, 3])
+    # print(data1.loc['感冒灵颗粒'])
+    # print(data2.loc['广东新峰药业股份有限公司'])
+    # print(data3.loc['感冒灵颗粒'].loc['广东新峰药业股份有限公司'])
+    print(data3.loc[('感冒灵颗粒', '广东新峰药业股份有限公司'), :])
+
+
 except KeyError:
     print('该数据为空')
 # try:

@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>数据分析页面</title>
+  <title>通过药品名查询</title>
 </head>
 
 <body>
@@ -49,9 +49,9 @@
     }
   </style>
   <center id="all">
-    <h1>数据分析</h1>
-    <form action="/DataAnalysis/result_data" method="get">
-      <input type="text" id="name" name="name" placeholder="请输入完整的药品名称">
+    <h1>厂家名称查询</h1>
+    <form action="/DataAnalysis/query_manufacturer_result" method="get">
+      <input type="text" id="manufacturer" name="manufacturer" placeholder="请输入完整的厂家名称">
       <input type="text" id="time" name="time" placeholder="输入爬取时间如：20201101">
       <input type="submit" value="提交" onclick="" class="btn">
     </form>
