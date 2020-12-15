@@ -56,11 +56,11 @@ io = r'medical_data_20201109.xlsx'
 #     print(ss)
 # except KeyError:
 #     print('该数据为空')
-# try:
-#     data = pd.read_excel(io, sheet_name='合纵', index_col='药名')
-#     print(dict(data.loc['足光散']))
-# except KeyError:
-#     print('该数据为空')
+try:
+    data = pd.read_excel(io, sheet_name='合纵', index_col='药名')
+    print(dict(data.loc['感冒灵颗粒']))
+except KeyError:
+    print('该数据为空')
 # try:
 #     data = pd.read_excel(io, sheet_name='聚创', index_col='药名')
 #     print(data.loc['感冒灵颗粒'])
@@ -71,23 +71,32 @@ io = r'medical_data_20201109.xlsx'
 #     print(dict(data.loc['感冒灵颗粒']))
 # except KeyError:
 #     print('该数据为空')
-try:
-    data1 = pd.read_excel(io, sheet_name='蓉锦', index_col='药名')
-    data2 = pd.read_excel(io, sheet_name='蓉锦', index_col='厂家')
-    data3 = pd.read_excel(io, sheet_name='蓉锦', index_col=[2, 3])
-    # print(data1.loc['感冒灵颗粒'])
-    # print(data2.loc['广东新峰药业股份有限公司'])
-    # print(data3.loc['感冒灵颗粒'].loc['广东新峰药业股份有限公司'])
-    print(data3.loc[('感冒灵颗粒', '广东新峰药业股份有限公司'), :])
-
-
-except KeyError:
-    print('该数据为空')
+# try:
+#     data1 = pd.read_excel(io, sheet_name='蓉锦', index_col='药名')
+#     data2 = pd.read_excel(io, sheet_name='蓉锦', index_col='厂家')
+#     data3 = pd.read_excel(io, sheet_name='蓉锦', index_col=[2, 3])
+#     # print(data1.loc['感冒灵颗粒'])
+#     # print(data2.loc['广东新峰药业股份有限公司'])
+#     # print(data3.loc['感冒灵颗粒'].loc['广东新峰药业股份有限公司'])
+#     print(data3.loc[('感冒灵颗粒', '广东新峰药业股份有限公司'), :])
+# except KeyError:
+#     print('该数据为空')
 # try:
 #     data = pd.read_excel(io, sheet_name='粤通', index_col='药名')
 #     print(data.loc['感冒灵颗粒'])
 # except KeyError:
 #     print('该数据为空')
+# sheetnames = ['合纵', '龙一', '蓉锦', '华鼎', '聚创', '粤通']
+# dataall = []
+# for sheetname in sheetnames:
+#     pandasData = pd.read_excel(io, sheet_name=sheetname, index_col='厂家')
+#     try:
+#         data = dict(pandasData.loc['南京易亨制药有限公司'])
+#         dataall.append(data)
+#     except KeyError:
+#         dataall.append('None')
+# print(dataall)
+
 
 
 

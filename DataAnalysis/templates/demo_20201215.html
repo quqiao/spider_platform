@@ -48,30 +48,26 @@
             font-weight: bold;
         }
 
-        .newTable>.companyBox>.bigBox>.goodsInfo {
+        .newTable>.companyBox>.goodsInfo {
+            border: 1px solid #EBEEF5;
             border-bottom: none;
         }
 
-        .newTable>.companyBox>.bigBox>.goodsInfo>.goodsList {
+        .newTable>.companyBox>.goodsInfo>.goodsList {
             background-color: #f8f8f8;
             min-height: 68px;
             list-style: none;
             display: flex;
             align-items: center;
             border-bottom: 1px solid #EBEEF5;
-        }
-        .bigBox{
-            border: 1px solid #EBEEF5;
-            width: 1200px;
             overflow-x: auto;
             overflow-y: hidden;
         }
-        .newTable>.companyBox>.bigBox>.goodsInfo>.goodsList>li{
+        .newTable>.companyBox>.goodsInfo>.goodsList>li{
             flex-shrink: 0;
-            background-color: #f8f8f8;
         }
 
-        .newTable>.companyBox>.bigBox>.goodsInfo>.goodsTitle {
+        .newTable>.companyBox>.goodsInfo>.goodsTitle {
             width: 80px;
             text-align: center;
             color: #999;
@@ -81,7 +77,7 @@
             font-weight: bold;
         }
 
-        .newTable>.companyBox>.bigBox>.goodsInfo>.goodsList>li {
+        .newTable>.companyBox>.goodsInfo>.goodsList>li {
             color: #333;
             width: 80px;
             text-align: center;
@@ -94,7 +90,7 @@
 </head>
 
 <body>
-    <h1>通过药品名进行查询</h1>
+    <h1>数据展示</h1>
     <!--	<p>1.只在谷歌/火狐下起作用，保留单元格合并的效果,下载之后的命名是:xxx.xls</p>-->
     <a id="dlink" style="display:none;"></a>
     <div class="w100">
@@ -106,106 +102,74 @@
         <h3>爬取时间：{{time}}</h3>
         <div class="companyBox">
             <div class="companyName">合纵</div>
-            <div class="bigBox">
             <div class="goodsInfo">
-                    {% for m1,n1 in data1.items %}
-                    <ul class="goodsList">
+                <div class="goodsTitle">原价</div>
+                <ul class="goodsList">
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                </ul>
+            </div>
+            <div class="goodsInfo">
+                <div class="goodsTitle">特价</div>
+                {% for m1,n1 in data1.items %}
 
+                    <div class="goodsList">
                                 {% for k1,j1 in n1.items %}
 
                                     <li>{{j1}}</li>
 
                                 {% endfor %}
-                    </ul>
-                    {% endfor %}
-            </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
-        <div class="companyBox">
-            <div class="companyName">龙一</div>
-            <div class="bigBox">
             <div class="goodsInfo">
-                    {% for m2,n2 in data2.items %}
-                    <ul class="goodsList">
-
-                                {% for k2,j2 in n2.items %}
-
-                                    <li>{{j2}}</li>
-
-                                {% endfor %}
-                    </ul>
-                    {% endfor %}
-            </div>
-            </div>
-        </div>
-        <div class="companyBox">
-            <div class="companyName">蓉锦</div>
-            <div class="bigBox">
-            <div class="goodsInfo">
-                    {% for m3,n3 in data3.items %}
-                    <ul class="goodsList">
-
-                                {% for k3,j3 in n3.items %}
-
-                                    <li>{{j3}}</li>
-
-                                {% endfor %}
-                    </ul>
-                    {% endfor %}
-            </div>
+                <div class="goodsTitle">厂家</div>
+                <ul class="goodsList">
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                    <li>￥20</li>
+                </ul>
             </div>
         </div>
-        <div class="companyBox">
-            <div class="companyName">华鼎</div>
-            <div class="bigBox">
-            <div class="goodsInfo">
-                    {% for m4,n4 in data4.items %}
-                    <ul class="goodsList">
-
-                                {% for k4,j4 in n4.items %}
-
-                                    <li>{{j4}}</li>
-
-                                {% endfor %}
-                    </ul>
-                    {% endfor %}
-            </div>
-            </div>
-        </div>
-        <div class="companyBox">
-            <div class="companyName">聚创</div>
-            <div class="bigBox">
-            <div class="goodsInfo">
-                    {% for m5,n6 in data6.items %}
-                    <ul class="goodsList">
-
-                                {% for k6,j6 in n6.items %}
-
-                                    <li>{{j6}}</li>
-
-                                {% endfor %}
-                    </ul>
-                    {% endfor %}
-            </div>
-            </div>
-        </div>
-        <div class="companyBox">
-            <div class="companyName">粤通</div>
-            <div class="bigBox">
-            <div class="goodsInfo">
-                    {% for m6,n6 in data6.items %}
-                    <ul class="goodsList">
-
-                                {% for k6,j6 in n6.items %}
-
-                                    <li>{{j6}}</li>
-
-                                {% endfor %}
-                    </ul>
-                    {% endfor %}
-            </div>
-            </div>
-        </div>
+    </div>
 
     <script type="text/javascript">
         var tableToExcel = (function () {

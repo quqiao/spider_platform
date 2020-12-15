@@ -50,7 +50,8 @@
   </style>
   <center id="all">
     <h1>厂家名称查询</h1>
-    <form action="/DataAnalysis/query_manufacturer_result" method="get">
+    <form action="/DataAnalysis/query_manufacturer_result" method="post">
+      {% csrf_token %}
       <input type="text" id="manufacturer" name="manufacturer" placeholder="请输入完整的厂家名称">
       <input type="text" id="time" name="time" placeholder="输入爬取时间如：20201101">
       <input type="submit" value="提交" onclick="" class="btn">
