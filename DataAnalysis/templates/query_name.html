@@ -31,7 +31,14 @@
       top: 50%;
       left: 50%;
     }
-
+    select {
+      height: 40px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      display: block;
+      width: 300px;
+      margin-bottom: 20px;
+    }
     input {
       height: 40px;
       border: 1px solid #ccc;
@@ -48,11 +55,23 @@
       cursor: pointer;
     }
   </style>
+  <script language="JavaScript">
+    function test(box){
+    document.all.box.value=box.value
+    }
+  </script>
   <center id="all">
     <h1>药品名查询</h1>
-    <form action="/DataAnalysis/query_name_result" method="get">
-      <input type="text" id="name" name="name" placeholder="请输入完整的药品名称">
-      <input type="text" id="time" name="time" placeholder="输入爬取时间如：20201101">
+    <form action="/DataAnalysis/query_name_result" method="post">
+      {% csrf_token %}
+      <select name="sel" onChange="test(this)">
+        <option>请选择相应抓取日期</option>
+        {% for t in times %}
+        <option value={{t}}>{{t}}</option>
+        {% endfor %}
+      </select>
+      <input type="text" id="name" name="name" required="required" placeholder="请输入完整的药品名称">
+      <input type="text" id="box" name="time" placeholder="选择爬取时间">
       <input type="submit" value="提交" onclick="" class="btn">
     </form>
   </center>

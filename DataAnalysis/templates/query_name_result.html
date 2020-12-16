@@ -110,11 +110,13 @@
             <div class="goodsInfo">
                     {% for m1,n1 in data1.items %}
                     <ul class="goodsList">
-
+                        {% if n1.items == None %}
+                        <li>{{n1}}</li>
+                        {% else %}
+                        <li>{{m1}}</li>
+                        {% endif %}
                                 {% for k1,j1 in n1.items %}
-
                                     <li>{{j1}}</li>
-
                                 {% endfor %}
                     </ul>
                     {% endfor %}
@@ -127,11 +129,13 @@
             <div class="goodsInfo">
                     {% for m2,n2 in data2.items %}
                     <ul class="goodsList">
-
+                        {% if n2.items == None %}
+                        <li>{{n2}}</li>
+                        {% else %}
+                        <li>{{m2}}</li>
+                        {% endif %}
                                 {% for k2,j2 in n2.items %}
-
                                     <li>{{j2}}</li>
-
                                 {% endfor %}
                     </ul>
                     {% endfor %}
@@ -144,11 +148,13 @@
             <div class="goodsInfo">
                     {% for m3,n3 in data3.items %}
                     <ul class="goodsList">
-
+                        {% if n3.items == None %}
+                        <li>{{n3}}</li>
+                        {% else %}
+                        <li>{{m3}}</li>
+                        {% endif %}
                                 {% for k3,j3 in n3.items %}
-
                                     <li>{{j3}}</li>
-
                                 {% endfor %}
                     </ul>
                     {% endfor %}
@@ -161,11 +167,13 @@
             <div class="goodsInfo">
                     {% for m4,n4 in data4.items %}
                     <ul class="goodsList">
-
+                        {% if n4.items == None %}
+                        <li>{{n4}}</li>
+                        {% else %}
+                        <li>{{m4}}</li>
+                        {% endif %}
                                 {% for k4,j4 in n4.items %}
-
                                     <li>{{j4}}</li>
-
                                 {% endfor %}
                     </ul>
                     {% endfor %}
@@ -176,13 +184,15 @@
             <div class="companyName">聚创</div>
             <div class="bigBox">
             <div class="goodsInfo">
-                    {% for m5,n6 in data6.items %}
+                    {% for m5,n5 in data5.items %}
                     <ul class="goodsList">
-
-                                {% for k6,j6 in n6.items %}
-
-                                    <li>{{j6}}</li>
-
+                        {% if n5.items == None %}
+                        <li>{{n5}}</li>
+                        {% else %}
+                        <li>{{m5}}</li>
+                        {% endif %}
+                                {% for k5,j5 in n5.items %}
+                                    <li>{{j5}}</li>
                                 {% endfor %}
                     </ul>
                     {% endfor %}
@@ -195,11 +205,13 @@
             <div class="goodsInfo">
                     {% for m6,n6 in data6.items %}
                     <ul class="goodsList">
-
-                                {% for k6,j6 in n6.items %}
-
+                        {% if n6.items == None %}
+                        <li>{{n6}}</li>
+                        {% else %}
+                        <li>{{m6}}</li>
+                        {% endif %}
+                         {% for k6,j6 in n6.items %}
                                     <li>{{j6}}</li>
-
                                 {% endfor %}
                     </ul>
                     {% endfor %}

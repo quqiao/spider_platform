@@ -6,7 +6,9 @@ from django.shortcuts import render, HttpResponseRedirect
 
 """通过药品名查询"""
 def query_name(request):
-    return render(request, 'query_name.html')
+    times = ["20201109", "20201119", "20201209"]
+    context = {'times': times}
+    return render(request, 'query_name.html', context)
 
 """通过厂家名查询"""
 def query_manufacturer(request):
@@ -18,43 +20,24 @@ def query_name_manufacturer(request):
 
 """药品名查询结果展示"""
 def query_name_result(request):
-    if request.method == 'GET':
+    if request.method == 'POST':
         try:
-            r = request.GET["name"]  # key就是前面输入框里的name属性对应值name="q"
-            t = request.GET["time"]  # 取需要的时间
+            r = request.POST.get("name")  # key就是前面输入框里的name属性对应值name="name"
+            t = request.POST.get("time")  # 取需要的时间
             io = r'F:\django\spider_platform\DataAnalysis\data\medical_data_%s.xlsx' % t
-            try:
-                pandasData = pd.read_excel(io, sheet_name='合纵', index_col='药名')
-                data_hz = dict(pandasData.loc[r])
-            except KeyError:
-                data_hz = '暂无该药品'
-            try:
-                pandasData = pd.read_excel(io, sheet_name='龙一', index_col='药名')
-                data_ly = dict(pandasData.loc[r])
-            except KeyError:
-                data_ly = '暂无该药品'
-            try:
-                pandasData = pd.read_excel(io, sheet_name='蓉锦', index_col='药名')
-                data_rj = dict(pandasData.loc[r])
-            except KeyError:
-                data_rj = '暂无该药品'
-            try:
-                pandasData = pd.read_excel(io, sheet_name='华鼎', index_col='药名')
-                data_hd = dict(pandasData.loc[r])
-            except KeyError:
-                data_hd = '暂无该药品'
-            try:
-                pandasData = pd.read_excel(io, sheet_name='聚创', index_col='药名')
-                data_jc = dict(pandasData.loc[r])
-            except KeyError:
-                data_jc = '暂无该药品'
-            try:
-                pandasData1 = pd.read_excel(io, sheet_name='粤通', index_col='药名')
-                data_yt = dict(pandasData1.loc[r])
-            except KeyError:
-                data_yt = '暂无该药品'
-            return render(request, 'query_name_result.html', {'name': r, 'time': t, 'data1': data_hz, 'data2': data_ly, 'data3': data_rj,
-                                                       'data4': data_hd, 'data5': data_jc, 'data6': data_yt})
+            sheetnames = ['合纵', '龙一', '蓉锦', '华鼎', '聚创', '粤通']
+            dataAll = []
+
+            for sheetname in sheetnames:
+                pandasData = pd.read_excel(io, sheet_name=sheetname, index_col='药名')
+                try:
+                    data = dict(pandasData.loc[r])
+                    dataAll.append(data)
+                except KeyError:
+                    dataAll.append('None')
+            context = {'name': r, 'time': t, 'data1': dataAll[0], 'data2': dataAll[1], 'data3': dataAll[2],
+                       'data4': dataAll[3], 'data5': dataAll[4], 'data6': dataAll[5]}
+            return render(request, 'query_name_result.html', context)
         except FileNotFoundError:
             return HttpResponseRedirect("/DataAnalysis/toast1")
 

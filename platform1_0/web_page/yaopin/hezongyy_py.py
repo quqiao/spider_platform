@@ -84,8 +84,8 @@ def save_csv():
     """在已有的excel中加入新的sheet保存数据"""
     data = {'原价': list_jiage, '特价': list_jiage2, '药名': list_mingzi, '厂家': list_compamy, '规格': list_guige,
             '效期': list_xiaoqi}
-    wb = openpyxl.load_workbook('F:\django\spider_platform\DataAnalysis\data\medical_data_20201109.xlsx')
-    writer = pd.ExcelWriter('F:\django\spider_platform\DataAnalysis\data\medical_data_20201109.xlsx', engine='openpyxl')  # 如果有多个模块可以读写excel文件，这里要指定engine，否则可能会报错
+    wb = openpyxl.load_workbook('/DataAnalysis/data/medical_data_20201109.xlsx')
+    writer = pd.ExcelWriter('/DataAnalysis/data/medical_data_20201109.xlsx', engine='openpyxl')  # 如果有多个模块可以读写excel文件，这里要指定engine，否则可能会报错
     writer.book = wb  # 没有这个语句的话excel表将完全被覆盖
     df = pd.DataFrame(data, columns=['原价', '特价', '药名', '厂家', '规格', '效期'])  # 如果有相同名字的工作表，新添加的将命名为Sheet21，如果Sheet21也有了就命名为Sheet22，不会覆盖原来的工作表
     df.to_excel(writer, encoding='utf-8', index=False, header=True, sheet_name='合纵')
