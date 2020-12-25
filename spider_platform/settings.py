@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'platform1_0',
     'platform2_0',
     'demo',
-    'DataAnalysis'
+    'rest_framework',
+    'DataAnalysis',
 ]
 
 MIDDLEWARE = [

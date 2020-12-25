@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.template import TemplateDoesNotExist
 from selenium.common.exceptions import InvalidSelectorException
 from platform1_0.web_page import ysb_lyg, longyi_tjzq, ypzdw_jtj, hezongyy_py
-from platform1_0.web_page.yaopin import longyi_yp, scjuchuang_yp, scytyy_ypzq
+from platform1_0.web_page.yaopin import longyi_yp, scjuchuang_yp, scytyy_yp
 from platform1_0.models import hezongyy_py1, longyi_yp1, scjuchuang_py1, ypzdw_jtj1, scytyy_ypzq1
 import re
 
@@ -55,8 +55,8 @@ def index_result(request):
                 return render(request, 'scjuchuang_py.html', {'users': users})
 
             elif "http://www.scytyy.net/goods" in r:  # 判断四川粤通药品中心
-                scytyy_ypzq.crawl_scytyy_ypzq(int(c))
-                scytyy_ypzq.save_mysql()
+                scytyy_yp.crawl_scytyy_ypzq(int(c))
+                scytyy_yp.save_mysql()
                 users = scytyy_ypzq1.objects.all()
                 return render(request, 'scytyy_ypzq.html', {'users': users})
 
