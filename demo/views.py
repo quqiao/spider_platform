@@ -35,23 +35,23 @@ def get_parameter_dic(request, *args, **kwargs):
         return result_data
 
 
-class CardSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Card
-        fields = "__all__"
-
-class CardViewSet(viewsets.ModelViewSet):
-    queryset = Card.objects.all()
-    serializer_class = CardSerializer
-
-    def get(self, request, *args, **kwargs):
-        params = get_parameter_dic(request)
-        return JsonResponse(data=params)
-
-    def post(self, request, *args, **kwargs):
-        params = get_parameter_dic(request)
-        return JsonResponse(data=params)
-
-    def put(self, request, *args, **kwargs):
-        params = get_parameter_dic(request)
-        return JsonResponse(data=params)
+# class CardSerializer(serializers.HyperlinkedModelSerializer):
+#     class Meta:
+#         model = Card
+#         fields = "__all__"
+#
+# class CardViewSet(viewsets.ModelViewSet):
+#     queryset = Card.objects.all()
+#     serializer_class = CardSerializer
+#
+#     def get(self, request, *args, **kwargs):
+#         params = get_parameter_dic(request)
+#         return JsonResponse(data=params)
+#
+#     def post(self, request, *args, **kwargs):
+#         params = get_parameter_dic(request)
+#         return JsonResponse(data=params)
+#
+#     def put(self, request, *args, **kwargs):
+#         params = get_parameter_dic(request)
+#         return JsonResponse(data=params)

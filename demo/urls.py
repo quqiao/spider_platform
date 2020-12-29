@@ -9,12 +9,12 @@ from django.conf.urls import url  # Django2.0
 from rest_framework import routers
 
 
-router = routers.DefaultRouter()
-router.register(r'cards', views.CardViewSet)
+# router = routers.DefaultRouter()
+# router.register(r'cards', views.CardViewSet)
 urlpatterns = [
     # url(r'^demo_css/', views.demo_css),
     # url(r'^demo_js/', views.demo_js),
     # url(r'^demo_bootstrap/', views.demo_bootstrap),
     # path("archive/<year>/<month>.html", views.archive),
-    url(r'^', include(router.urls)),
+    # url(r'^', include(router.urls)),
     ]
