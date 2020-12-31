@@ -5,6 +5,7 @@ import time
 import pandas as pd
 from lxml import etree
 import openpyxl
+import pymysql
 
 list_jiage = []
 list_jiage2 = []
@@ -28,7 +29,7 @@ def crawl_hezongyy_yp():
     time.sleep(1)
     driver.maximize_window()  # 进行全屏展示
 
-    for i in range(1, 280):
+    for i in range(1, 4):
         time.sleep(5)
         html_sourcode = driver.page_source  # 获取页面源码
         html = etree.HTML(html_sourcode, etree.HTMLParser())  # 利用etree.HTML，将字符串解析为HTML文档
@@ -62,7 +63,7 @@ def crawl_hezongyy_yp():
         driver.find_element_by_class_name('el-icon.el-icon-arrow-right').click()  # 点击下一页
     driver.close()  # 关闭网页
 
-def save_csv():
+def save_excel():
     """使用csv保存数据"""
     # dataframe = pd.DataFrame({'原价': list_jiage, '特价': list_jiage2, '药名': list_mingzi, '厂家': list_compamy, '规格': list_guige,
     #              '效期': list_xiaoqi})  # 字典中的key值即为csv中列名
@@ -91,7 +92,39 @@ def save_csv():
         dataframe = pd.DataFrame(data, columns=['原价', '特价', '药名', '厂家', '规格', '效期'])
         dataframe.to_excel("F:/django/spider_platform/DataAnalysis/data/medical_data_%s.xlsx" % nowtime, encoding='utf-8', index=False, header=True, sheet_name='合纵')
 
+def save_mysql():
+    conn = pymysql.connect('localhost', 'root', '123456', 'spider_platform')  # 有中文要存入数据库的话要加charset='utf8'
+    # 创建游标
+    cursor = conn.cursor()  # pymysql.cursors.DictCursor
+    cursor.execute("DROP TABLE IF EXISTS hezongyy_yp")
+    # 使用预处理语句创建表
+    sql = """
+          CREATE TABLE hezongyy_yp 
+          (
+             ID int unsigned auto_increment primary key,
+             name VARCHAR(100),
+             cj VARCHAR(100),
+             gg VARCHAR(100),
+             xq VARCHAR(100),
+             price VARCHAR(100),
+             price1 VARCHAR(100)
+          )
+          """
+    cursor.execute(sql)
+    insert_sql = """
+                 insert into hezongyy_yp 
+                 (name,cj,gg,xq,price,price1) 
+                 VALUES
+                 (%s,%s,%s,%s,%s,%s)
+                 """
+    for i in range(len(list_jiage)):
+        cursor.execute(insert_sql, (list_mingzi[i], list_compamy[i], list_guige[i], list_xiaoqi[i], list_jiage[i], list_jiage2[i]))
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
 
 if __name__ == '__main__':  # 验证拼接后的正确性
     crawl_hezongyy_yp()
-    save_csv()
+    save_mysql()
