@@ -9,6 +9,9 @@ import re
 # print(m2)
 
 
-str = "-"
-seq = ("a", "b", "c")  # 字符串序列
-print(" ".join(seq))
+# str = "-"
+# seq = ("a", "b", "c")  # 字符串序列
+# print(" ".join(seq))
+
+for i in range(1, 31):
+    print(i)

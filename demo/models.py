@@ -37,3 +37,44 @@ class Tag(models.Model):
 #
 #     def __str__(self):
 #         return self.card_id
+
+"""ORM单表实例"""
+class NBA_data(models.Model):
+    id = models.AutoField(primary_key=True)  # id会自动创建，可以手动写入
+    qy = models.CharField(max_length=32)  # 球员名称
+    ccrq = models.CharField(max_length=32)  # 球员出场时间
+    df = models.IntegerField()  # 得分
+    zg = models.IntegerField()  # 助攻
+    lb = models.IntegerField()  # 篮板
+
+"""ORM多表实例"""
+class Book(models.Model):
+    title = models.CharField(max_length=32)
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    pub_date = models.DateField()
+    publish = models.ForeignKey('Publish', on_delete=models.CASCADE)
+    authors = models.ManyToManyField('Author')
+
+class Publish(models.Model):
+    name = models.CharField(max_length=32)
+    city = models.CharField(max_length=64)
+    email = models.EmailField()
+
+class Author(models.Model):
+    name = models.CharField(max_length=32)
+    age = models.SmallIntegerField()
+    au_detail = models.OneToOneField("AuthorDetail", on_delete=models.CASCADE)
+
+class AuthorDetail(models.Model):
+    gender_choices = (
+        (0, "女"),
+        (1, "男"),
+        (2, "保密"),
+    )
+    gender = models.SmallIntegerField(choices=gender_choices)
+    tel = models.CharField(max_length=32)
+    addr = models.CharField(max_length=64)
+    birthday = models.DateField()
+
+
+

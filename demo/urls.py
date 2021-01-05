@@ -17,4 +17,9 @@ urlpatterns = [
     # url(r'^demo_bootstrap/', views.demo_bootstrap),
     # path("archive/<year>/<month>.html", views.archive),
     # url(r'^', include(router.urls)),
+    path('add_data', views.add_Data),
+    path('query_data', views.query_Data),
+    path('delete_data', views.delete_Data),
+    path('modify_data', views.modify_Data),
+    path('add_book', views.add_book),
     ]

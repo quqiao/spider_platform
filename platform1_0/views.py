@@ -6,7 +6,8 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.template import TemplateDoesNotExist
 from selenium.common.exceptions import InvalidSelectorException
-from platform1_0.web_page import ysb_lyg, longyi_tjzq, ypzdw_jtj, hezongyy_py
+from platform1_0.web_page import ysb_lyg, ypzdw_jtj, hezongyy_py
+from platform1_0.web_page.huodong import longyi_tjzq
 from platform1_0.web_page.yaopin import longyi_yp, scjuchuang_yp, scytyy_yp
 from platform1_0.models import hezongyy_py1, longyi_yp1, scjuchuang_py1, ypzdw_jtj1, scytyy_ypzq1
 import re
