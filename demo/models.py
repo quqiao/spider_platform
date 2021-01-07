@@ -76,5 +76,10 @@ class AuthorDetail(models.Model):
     addr = models.CharField(max_length=64)
     birthday = models.DateField()
 
+"""cookie与session"""
+class UserInfo(models.Model):
+    username = models.CharField(max_length=32)
+    password = models.CharField(max_length=64)
+
 
 

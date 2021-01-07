@@ -52,6 +52,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'demo.middlewares.MD1'  # 自定义中间件
 ]
 
 ROOT_URLCONF = 'spider_platform.urls'
