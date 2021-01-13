@@ -4,7 +4,7 @@ __author__ = "quqiao"
 # -*- coding:utf-8 -*-
 
 from django.urls import path, re_path, include  # Django版本2.0以上
-from platform1_0 import views
+from platform1_0 import views, view_api
 from django.conf.urls import url  # Django2.0
 from django.contrib import admin
 
@@ -22,4 +22,7 @@ urlpatterns = [
     url(r'^toast2/', views.toast2),
     url(r'^toast3/', views.toast3),
     url(r'^toast4/', views.toast4),
+    path('add_yp', view_api.add_yp, name='add_yp'),
+    path('query_yp', view_api.query_yp, name='query_yp'),
+    path('update_yp', view_api.update_yp, name='update_yp'),
     ]

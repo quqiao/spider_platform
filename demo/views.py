@@ -27,7 +27,7 @@ def demo_bootstrap(request):
     return render(request, 'demo_bootstrap.html')
 
 def archive(request, year="2018", month="01"):
-    return HttpResponse("获取当前页面home时间标签：%s年/%s月" %(year, month))
+    return HttpResponse("获取当前页面home时间标签：%s年/%s月" % (year, month))
 
 def get_parameter_dic(request, *args, **kwargs):
     if isinstance(request, Request) == False:
@@ -42,28 +42,6 @@ def get_parameter_dic(request, *args, **kwargs):
         return query_params
     else:
         return result_data
-
-
-# class CardSerializer(serializers.HyperlinkedModelSerializer):
-#     class Meta:
-#         model = Card
-#         fields = "__all__"
-#
-# class CardViewSet(viewsets.ModelViewSet):
-#     queryset = Card.objects.all()
-#     serializer_class = CardSerializer
-#
-#     def get(self, request, *args, **kwargs):
-#         params = get_parameter_dic(request)
-#         return JsonResponse(data=params)
-#
-#     def post(self, request, *args, **kwargs):
-#         params = get_parameter_dic(request)
-#         return JsonResponse(data=params)
-#
-#     def put(self, request, *args, **kwargs):
-#         params = get_parameter_dic(request)
-#         return JsonResponse(data=params)
 
 """数据库请求----ORM单表实例"""
 "对象.save() 新增"
