@@ -35,45 +35,45 @@ def crawl_longyi_tjzq_pt():
     driver.find_element_by_class_name('loginBtn').click()
     time.sleep(1)
 
-    for i in range(1, 33):
-        driver.get("https://www.scjuchuang.com/newTemplate?theme=3&group_id=2566&isset_cart=&id=115&order_type=&order=&activity_type=1&page=%d" % i)
+    for i in range(1, 388):
+        driver.get("https://www.scjuchuang.com/newTemplate?theme=2&group_id=3778&isset_cart=&id=126&order_type=&order=&activity_type=1&page=%d" % i)
         time.sleep(3)  # 停顿3秒等待页面加载完毕！！！（必须留有页面加载的时间，否则获得的源代码会不完整。）
         html_sourcode = driver.page_source
         html = etree.HTML(html_sourcode, etree.HTMLParser())
         for j in range(1, 21):
-            jg = html.xpath('/html/body/div[9]/div[4]/div/ul/li[%d]/div[2]/span[1]/text()' % j)
+            jg = html.xpath('/html/body/div[8]/div[4]/div/ul/li[%d]/div[2]/span/text()' % j)
             jg1 = ''.join(jg)
             list_jiage.append(jg1)
         for j in range(1, 21):
-            jg2 = html.xpath('/html/body/div[9]/div[4]/div/ul/li[%d]/div[2]/span[2]/text()' % j)
+            jg2 = html.xpath('/html/body/div[8]/div[4]/div/ul/li[%d]/p[3]/span[2]/text()' % j)
             jg3 = ''.join(jg2)
             list_jiage2.append(jg3)
         for n in range(1, 21):
-            cj = html.xpath('/html/body/div[9]/div[4]/div/ul/li[%d]/p[1]/text()' % n)
+            cj = html.xpath('/html/body/div[8]/div[4]/div/ul/li[%d]/p[1]/text()' % n)
             cj1 = ''.join(cj)
             list_compamy.append(cj1)
         for m in range(1, 21):
-            mz = html.xpath('/html/body/div[9]/div[4]/div/ul/li[%d]/div[4]/text()' % m)
+            mz = html.xpath('/html/body/div[8]/div[4]/div/ul/li[%d]/div[4]/text()' % m)
             mz1 = ''.join(mz)
             list_mingzi.append(mz1)
         for g in range(1, 21):
-            gg = html.xpath('/html/body/div[9]/div[4]/div/ul/li[%d]/p[2]/text()' % g)
+            gg = html.xpath('/html/body/div[8]/div[4]/div/ul/li[%d]/p[2]/text()' % g)
             gg1 = ''.join(gg)
             list_guige.append(gg1)
         for x in range(1, 21):
-            xq = html.xpath('/html/body/div[9]/div[4]/div/ul/li[%d]/p[3]/span[1]/text()' % x)
+            xq = html.xpath('/html/body/div[8]/div[4]/div/ul/li[%d]/p[4]/span[1]/text()' % x)
             xq1 = ''.join(xq)
             list_xiaoqi.append(xq1)
         for z in range(1, 21):
-            xg = html.xpath('/html/body/div[9]/div[4]/div/ul/li[%d]/p[5]/span[2]/text()' % z)
+            xg = html.xpath('/html/body/div[8]/div[4]/div/ul/li[%d]/p[6]/span[2]/text()' % z)
             xg1 = ''.join(xg)
             list_xiangou.append(xg1)
     driver.close()
 
 """保存为csv格式文件"""
 def save_csv():
-    dataframe = pd.DataFrame({'原价': list_jiage2, '特价': list_jiage, '药名': list_mingzi, '厂家': list_compamy, '规格': list_guige, '效期': list_xiaoqi, '限购': list_xiangou})  # 字典中的key值即为csv中列名
-    dataframe.to_csv("scjuchuang_bptj_20201103.csv", index=False, sep=',')  # 将DataFrame存储为csv,index表示是否显示行名，default=True
+    dataframe = pd.DataFrame({'原价': list_jiage2, '券后约': list_jiage, '药名': list_mingzi, '厂家': list_compamy, '规格': list_guige, '效期': list_xiaoqi, '限购': list_xiangou})  # 字典中的key值即为csv中列名
+    dataframe.to_csv("scjuchuang_mjzq_20210115.csv", index=False, sep=',')  # 将DataFrame存储为csv,index表示是否显示行名，default=True
 
 """存储到mysql数据库中"""
 def save_mysql():
