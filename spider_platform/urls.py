@@ -18,6 +18,7 @@ from django.urls import path, re_path, include
 from platform1_0 import views
 from django.conf.urls import url  # Django2.0
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     re_path('platform1/', include("platform1_0.urls")),

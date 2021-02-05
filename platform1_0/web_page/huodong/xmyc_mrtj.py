@@ -18,7 +18,7 @@ list_compamy = []
 list_guige = []
 list_xiaoqi = []
 
-def crawl_hezongyy():
+def crawl_xmyc():
     executable_path = "C:/Users/Administrator/AppData/Local/Google/Chrome/Application/chromedriver.exe"
     driver = webdriver.Chrome(executable_path=executable_path)
     driver.get("https://www.xmyc.com.cn/login")
@@ -32,46 +32,46 @@ def crawl_hezongyy():
     time.sleep(1)
     driver.maximize_window()
     time.sleep(1)
-    driver.get("https://www.xmyc.com.cn/searchresult")
-    for i in range(1, 471):
+    driver.get("https://www.xmyc.com.cn/specialPrice?identity_type=2")
+    for i in range(1, 3):
         time.sleep(5)
         html_sourcode = driver.page_source
         html = etree.HTML(html_sourcode, etree.HTMLParser())
         for i in range(1, 31):
-            jg = html.xpath('//*[@id="app"]/div[2]/div[2]/ul[1]/li[%d]/div/div[2]/a/div[1]/span[1]/text()' % i)
+            jg = html.xpath('//*[@id="app"]/div[2]/div[3]/div[2]/div[%d]/div[2]/a/div[1]/span/text()' % i)
             jg1 = ''.join(jg)
             list_jiage.append(jg1)
 
         for i in range(1, 31):
             # ss = html.xpath('//*[@id="app"]/div[2]/div[2]/ul[1]/li/div[%d]/div[2]/a/div[1]/span[2]/img/@src' % i)
             # print(ss)
-            if html.xpath('//*[@id="app"]/div[2]/div[2]/ul[1]/li[%d]/div/div[2]/a/div[1]/span[2]/img/@src' % i) == ['/img/goods/default-coupon.png']:
+            if html.xpath('//*[@id="app"]/div[2]/div[3]/div[2]/div[%d]/div[2]/a/div[1]/span[2]/img/@src' % i) == ['/img/goods/default-coupon.png']:
                 list_jiage2.append("优惠券")
             else:
                 list_jiage2.append("无")
 
         for i in range(1, 31):
-            jg = html.xpath('//*[@id="app"]/div[2]/div[2]/ul[1]/li[%d]/div/div[2]/a/div[1]/span[2]/em/text()' % i)
+            jg = html.xpath('//*[@id="app"]/div[2]/div[3]/div[2]/div[%d]/div[2]/a/div[1]/span[2]/em/text()' % i)
             jg3 = ''.join(jg)
             list_jiage3.append(jg3)
 
         for j in range(1, 31):
-            mz = html.xpath('//*[@id="app"]/div[2]/div[2]/ul[1]/li[%d]/div/div[2]/a/div[2]/text()' % j)
+            mz = html.xpath('//*[@id="app"]/div[2]/div[3]/div[2]/div[%d]/div[2]/a/div[2]/text()' % j)
             mz1 = ''.join(mz)
             list_mingzi.append(mz1)
 
         for n in range(1, 31):
-            cj = html.xpath('//*[@id="app"]/div[2]/div[2]/ul[1]/li[%d]/div/div[2]/a/p[4]/text()' % n)
+            cj = html.xpath('//*[@id="app"]/div[2]/div[3]/div[2]/div[%d]/div[2]/a/p[4]/text()' % n)
             cj1 = ''.join(cj)
             list_compamy.append(cj1)
 
         for g in range(1, 31):
-            gg = html.xpath('//*[@id="app"]/div[2]/div[2]/ul[1]/li[%d]/div/div[2]/a/p[1]/text()' % g)
+            gg = html.xpath('//*[@id="app"]/div[2]/div[3]/div[2]/div[%d]/div[2]/a/p[1]/text()' % g)
             gg1 = ''.join(gg)
             list_guige.append(gg1)
 
         for x in range(1, 31):
-            xq = html.xpath('//*[@id="app"]/div[2]/div[2]/ul[1]/li[%d]/div/div[2]/a/p[2]/span[1]/label/text()' % x)
+            xq = html.xpath('//*[@id="app"]/div[2]/div[3]/div[2]/div[%d]/div[2]/a/p[2]/span[1]/label/text()' % x)
             xq1 = ''.join(xq)
             list_xiaoqi.append(xq1)
         time.sleep(2)
@@ -82,16 +82,16 @@ def crawl_hezongyy():
     driver.close()
 
 def save_csv():
-    # """使用csv保存数据"""
-    # dataframe = pd.DataFrame({'原价': list_jiage, '优惠券': list_jiage2, "券": list_jiage3, '药名': list_mingzi, '厂家': list_compamy, '规格': list_guige,
+    """使用csv保存数据"""
+    # dataframe = pd.DataFrame({'原价': list_jiage, '优惠券': list_jiage2,'券':list_jiage3, '药名': list_mingzi, '厂家': list_compamy, '规格': list_guige,
     #              '效期': list_xiaoqi})  # 字典中的key值即为csv中列名
-    # dataframe.to_csv("hezongyy_20201111.csv", index=False, sep=',')  # 将DataFrame存储为csv,index表示是否显示行名，default=True
+    # dataframe.to_csv("hezongyy_20210119.csv", index=False, sep=',')  # 将DataFrame存储为csv,index表示是否显示行名，default=True
 
     """通过xlsx保存数据"""
-    data = {'原价': list_jiage, "优惠券": list_jiage2, "券": list_jiage3, '药名': list_mingzi, '厂家': list_compamy, '规格': list_guige, '效期': list_xiaoqi}
+    data = {'原价': list_jiage, "优惠券":list_jiage2, "券": list_jiage3, '药名': list_mingzi, '厂家': list_compamy, '规格': list_guige, '效期': list_xiaoqi}
     dataframe = pd.DataFrame(data, columns=['原价', '优惠券', '券', '药名', '厂家', '规格', '效期'])
-    dataframe.to_excel("xmyc_yp_20210128.xlsx", encoding='utf-8', index=False, header=True, sheet_name='熊猫')
-    print(dataframe)
+    dataframe.to_excel("xmyc_mrtj_20210119.xlsx", encoding='utf-8', index=False, header=True, sheet_name='熊猫')
+    # print(dataframe)
 
     """在已有的excel中加入新的sheet保存数据"""
     # data = {'原价': list_jiage,'药名': list_mingzi, '厂家': list_compamy, '规格': list_guige,
@@ -106,5 +106,5 @@ def save_csv():
 
 
 if __name__ == '__main__':  # 验证拼接后的正确性
-    crawl_hezongyy()
+    crawl_xmyc()
     save_csv()

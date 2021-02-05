@@ -29,19 +29,19 @@ def demo_bootstrap(request):
 def archive(request, year="2018", month="01"):
     return HttpResponse("获取当前页面home时间标签：%s年/%s月" % (year, month))
 
-def get_parameter_dic(request, *args, **kwargs):
-    if isinstance(request, Request) == False:
-        return {}
-    query_params = request.query_params
-    if isinstance(query_params, QueryDict):
-        query_params = query_params.dict()
-    result_data = request.data
-    if isinstance(result_data, QueryDict):
-        result_data = result_data.dict()
-    if query_params != {}:
-        return query_params
-    else:
-        return result_data
+# def get_parameter_dic(request, *args, **kwargs):
+#     if isinstance(request, Request) == False:
+#         return {}
+#     query_params = request.query_params
+#     if isinstance(query_params, QueryDict):
+#         query_params = query_params.dict()
+#     result_data = request.data
+#     if isinstance(result_data, QueryDict):
+#         result_data = result_data.dict()
+#     if query_params != {}:
+#         return query_params
+#     else:
+#         return result_data
 
 """数据库请求----ORM单表实例"""
 "对象.save() 新增"
