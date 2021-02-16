@@ -21,9 +21,8 @@ from django.conf.urls import url  # Django2.0
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    re_path('platform1/', include("platform1_0.urls")),
-    re_path('platform2/', include("platform2_0.urls")),
-    re_path('demo/', include("demo.urls")),
-    re_path('DataAnalysis/', include("DataAnalysis.urls")),
-
+    re_path('platform1/', include("platform1_0.urls")),  # 爬虫抓取框架1.0版本
+    re_path('platform2/', include("platform2_0.urls")),  # 爬虫抓取框架2.0版本
+    re_path('demo/', include("demo.urls")),  # django 练习的版本
+    re_path('DataAnalysis/', include("DataAnalysis.urls")),  # 抓取数据分析
 ]
