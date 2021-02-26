@@ -1,0 +1,2119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.1.1 r1855137">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="新平台" enabled="true">
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <kg.apc.jmeter.threads.SteppingThreadGroup guiclass="kg.apc.jmeter.threads.SteppingThreadGroupGui" testclass="kg.apc.jmeter.threads.SteppingThreadGroup" testname="jp@gc - Stepping Thread Group (deprecated)" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <stringProp name="ThreadGroup.num_threads">100</stringProp>
+        <stringProp name="Threads initial delay">0</stringProp>
+        <stringProp name="Start users count">0</stringProp>
+        <stringProp name="Start users count burst">0</stringProp>
+        <stringProp name="Start users period">0</stringProp>
+        <stringProp name="Stop users count"></stringProp>
+        <stringProp name="Stop users period"></stringProp>
+        <stringProp name="flighttime">300</stringProp>
+        <stringProp name="rampUp"></stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <intProp name="LoopController.loops">-1</intProp>
+        </elementProp>
+      </kg.apc.jmeter.threads.SteppingThreadGroup>
+      <hashTree>
+        <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="JSR223 PreProcessor" enabled="false">
+          <stringProp name="cacheKey">true</stringProp>
+          <stringProp name="filename">C:/Users/Administrator/Desktop/sign.txt</stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="script">var systemtimestamp = Math.floor(new Date().getTime()/1000);
+var systemsign = hex_sha1(systemtimestamp+&quot;YYG@ZLY#1024&quot;);
+
+pm.globals.set(&quot;systemtimestamp&quot;,systemtimestamp);
+pm.globals.set(&quot;systemsign&quot;,systemsign.toUpperCase());
+
+console.log(&quot;systemsign: &quot;+systemsign.toLocaleUpperCase());
+
+
+
+var hexcase = 0;  /* hex output format. 0 - lowercase; 1 - uppercase        */
+
+var chrsz   = 8;  /* bits per input character. 8 - ASCII; 16 - Unicode      */
+
+ 
+
+/*
+
+ * The main function to calculate message digest
+
+ */
+
+function hex_sha1(s)
+
+{
+
+       return binb2hex(core_sha1(AlignSHA1(s)));
+
+}
+
+ 
+
+ 
+
+/*
+
+ * Perform a simple self-test to see if the VM is working
+
+ */
+
+function sha1_vm_test()
+
+{
+
+  return hex_sha1(&quot;abc&quot;) == &quot;a9993e364706816aba3e25717850c26c9cd0d89d&quot;;
+
+}
+
+ 
+
+ 
+
+/*
+
+ * Calculate the SHA-1 of an array of big-endian words, and a bit length
+
+ */
+
+function core_sha1(blockArray)
+
+{
+
+  var x = blockArray;  //append padding
+
+ 
+
+  var w = Array(80);
+
+  var a =  1732584193;
+
+  var b = -271733879;
+
+  var c = -1732584194;
+
+  var d =  271733878;
+
+  var e = -1009589776;
+
+ 
+
+  for(var i = 0; i &lt; x.length; i += 16)  //每次处理512位 16*32
+
+  {
+
+    var olda = a;
+
+    var oldb = b;
+
+    var oldc = c;
+
+    var oldd = d;
+
+    var olde = e;
+
+ 
+
+    for(var j = 0; j &lt; 80; j++)  //对每个512位进行80步操作
+
+    {
+
+      if(j &lt; 16) w[j] = x[i + j];
+
+      else w[j] = rol(w[j-3] ^ w[j-8] ^ w[j-14] ^ w[j-16], 1);
+
+      
+
+      var t = safe_add(safe_add(rol(a, 5), sha1_ft(j, b, c, d)),
+
+                       safe_add(safe_add(e, w[j]), sha1_kt(j)));
+
+      e = d;
+
+      d = c;
+
+      c = rol(b, 30);
+
+      b = a;
+
+      a = t;
+
+    }
+
+ 
+
+    a = safe_add(a, olda);
+
+    b = safe_add(b, oldb);
+
+    c = safe_add(c, oldc);
+
+    d = safe_add(d, oldd);
+
+    e = safe_add(e, olde);
+
+  }
+
+  return new Array(a, b, c, d, e);
+
+ 
+
+}
+
+ 
+
+ 
+
+/*
+
+ * Perform the appropriate triplet combination function for the current iteration
+
+ * 返回对应F函数的值
+
+ */
+
+function sha1_ft(t, b, c, d)
+
+{
+
+  if(t &lt; 20) return (b &amp; c) | ((~b) &amp; d);
+
+  if(t &lt; 40) return b ^ c ^ d;
+
+  if(t &lt; 60) return (b &amp; c) | (b &amp; d) | (c &amp; d);
+
+  return b ^ c ^ d;  //t&lt;80
+
+}
+
+ 
+
+ 
+
+/*
+
+ * Determine the appropriate additive constant for the current iteration
+
+ * 返回对应的Kt值
+
+ */
+
+function sha1_kt(t)
+
+{
+
+  return (t &lt; 20) ?  1518500249 : (t &lt; 40) ?  1859775393 :
+
+         (t &lt; 60) ? -1894007588 : -899497514;
+
+}
+
+ 
+
+ 
+
+/*
+
+ * Add integers, wrapping at 2^32. This uses 16-bit operations internally
+
+ * to work around bugs in some JS interpreters.
+
+ * 将32位数拆成高16位和低16位分别进行相加，从而实现 MOD 2^32 的加法
+
+ */
+
+function safe_add(x, y)
+
+{
+
+  var lsw = (x &amp; 0xFFFF) + (y &amp; 0xFFFF);
+
+  var msw = (x &gt;&gt; 16) + (y &gt;&gt; 16) + (lsw &gt;&gt; 16);
+
+  return (msw &lt;&lt; 16) | (lsw &amp; 0xFFFF);
+
+}
+
+ 
+
+ 
+
+/*
+
+ * Bitwise rotate a 32-bit number to the left.
+
+ * 32位二进制数循环左移
+
+ */
+
+function rol(num, cnt)
+
+{
+
+  return (num &lt;&lt; cnt) | (num &gt;&gt;&gt; (32 - cnt));
+
+}
+
+ 
+
+ 
+
+/*
+
+ * The standard SHA1 needs the input string to fit into a block
+
+ * This function align the input string to meet the requirement
+
+ */
+
+function AlignSHA1(str){
+
+  var nblk=((str.length+8)&gt;&gt;6)+1, blks=new Array(nblk*16);
+
+  for(var i=0;i&lt;nblk*16;i++)blks[i]=0;
+
+  for(i=0;i&lt;str.length;i++)
+
+    blks[i&gt;&gt;2]|=str.charCodeAt(i)&lt;&lt;(24-(i&amp;3)*8);
+
+  blks[i&gt;&gt;2]|=0x80&lt;&lt;(24-(i&amp;3)*8);
+
+  blks[nblk*16-1]=str.length*8;
+
+  return blks;
+
+}
+
+ 
+
+ 
+
+/*
+
+ * Convert an array of big-endian words to a hex string.
+
+ */
+
+function binb2hex(binarray)
+
+{
+
+  var hex_tab = hexcase ? &quot;0123456789ABCDEF&quot; : &quot;0123456789abcdef&quot;;
+
+  var str = &quot;&quot;;
+
+  for(var i = 0; i &lt; binarray.length * 4; i++)
+
+  {
+
+    str += hex_tab.charAt((binarray[i&gt;&gt;2] &gt;&gt; ((3 - i%4)*8+4)) &amp; 0xF) +
+
+           hex_tab.charAt((binarray[i&gt;&gt;2] &gt;&gt; ((3 - i%4)*8  )) &amp; 0xF);
+
+  }
+
+  return str;
+
+}
+
+ 
+
+/*
+
+ * calculate MessageDigest accord to source message that inputted
+
+ */
+
+function calcDigest()
+
+{
+
+       var digestM = hex_sha1(document.SHAForm.SourceMessage.value);
+
+       document.SHAForm.MessageDigest.value = digestM;
+
+}</stringProp>
+          <stringProp name="scriptLanguage">javascript</stringProp>
+        </JSR223PreProcessor>
+        <hashTree/>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">hesytoken</stringProp>
+              <stringProp name="Header.value">7606619d-21d2-11eb-b432-7cd30adbe42c</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Content-Type</stringProp>
+              <stringProp name="Header.value">application/json</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="特价专场" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&quot;keyWord&quot;:null,&quot;isGift&quot;:0,&quot;isChoose&quot;:0,&quot;drugType&quot;:0,&quot;pageNumber&quot;:${number},&quot;pageSize&quot;:40}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">newapi.hezongyy.com</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">/sale/promotion/promotionActivity</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">hesytoken</stringProp>
+                <stringProp name="Header.value">4c70fad7-2185-11eb-9499-6c92bf4757fb</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="script">prev.setDataEncoding(&quot;utf-8&quot;);</stringProp>
+          </BeanShellPreProcessor>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-2024745369">&quot;code&quot;:&quot;000000&quot;</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
+            <stringProp name="filename">C:/Users/Administrator/Desktop/apache-jmeter-5.1.1/bin/test.txt</stringProp>
+            <stringProp name="fileEncoding">UTF-8</stringProp>
+            <stringProp name="variableNames">number</stringProp>
+            <boolProp name="ignoreFirstLine">false</boolProp>
+            <stringProp name="delimiter">,</stringProp>
+            <boolProp name="quotedData">false</boolProp>
+            <boolProp name="recycle">true</boolProp>
+            <boolProp name="stopThread">false</boolProp>
+            <stringProp name="shareMode">shareMode.all</stringProp>
+          </CSVDataSet>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="折扣专场" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&quot;pageNumber&quot;:${number},&quot;pageSize&quot;:40,&quot;discount&quot;:0,&quot;drugType&quot;:0}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">newapi.hezongyy.com</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">/sale/promotion/discountActivityList</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">hesytoken</stringProp>
+                <stringProp name="Header.value">4c70fad7-2185-11eb-9499-6c92bf4757fb</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="script">prev.setDataEncoding(&quot;utf-8&quot;);</stringProp>
+          </BeanShellPreProcessor>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-2024745369">&quot;code&quot;:&quot;000000&quot;</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
+            <stringProp name="filename">C:/Users/Administrator/Desktop/apache-jmeter-5.1.1/bin/test.txt</stringProp>
+            <stringProp name="fileEncoding">UTF-8</stringProp>
+            <stringProp name="variableNames">number</stringProp>
+            <boolProp name="ignoreFirstLine">false</boolProp>
+            <stringProp name="delimiter">,</stringProp>
+            <boolProp name="quotedData">false</boolProp>
+            <boolProp name="recycle">true</boolProp>
+            <boolProp name="stopThread">false</boolProp>
+            <stringProp name="shareMode">shareMode.all</stringProp>
+          </CSVDataSet>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="阶梯价专场" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&quot;pageNumber&quot;:1,&quot;pageSize&quot;:40,&quot;keyWords&quot;:&quot;&quot;,&quot;isChoose&quot;:0}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">newapi.hezongyy.com</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">/sale/ladderPrice/searchList</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">hesytoken</stringProp>
+                <stringProp name="Header.value">4c70fad7-2185-11eb-9499-6c92bf4757fb</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="script">prev.setDataEncoding(&quot;utf-8&quot;);</stringProp>
+          </BeanShellPreProcessor>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-2024745369">&quot;code&quot;:&quot;000000&quot;</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
+            <stringProp name="filename">C:/Users/Administrator/Desktop/apache-jmeter-5.1.1/bin/test.txt</stringProp>
+            <stringProp name="fileEncoding">UTF-8</stringProp>
+            <stringProp name="variableNames">number</stringProp>
+            <boolProp name="ignoreFirstLine">false</boolProp>
+            <stringProp name="delimiter">,</stringProp>
+            <boolProp name="quotedData">false</boolProp>
+            <boolProp name="recycle">true</boolProp>
+            <boolProp name="stopThread">false</boolProp>
+            <stringProp name="shareMode">shareMode.all</stringProp>
+          </CSVDataSet>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="中药专场" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&quot;page&quot;:${number},&quot;display&quot;:${display},&quot;chineseHerb&quot;:1}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">newapi.hezongyy.com</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">/goods/119/promotionalList</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">hesytoken</stringProp>
+                <stringProp name="Header.value">4c70fad7-2185-11eb-9499-6c92bf4757fb</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="script">prev.setDataEncoding(&quot;utf-8&quot;);</stringProp>
+          </BeanShellPreProcessor>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-2024745369">&quot;code&quot;:&quot;000000&quot;</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
+            <stringProp name="filename">C:/Users/Administrator/Desktop/apache-jmeter-5.1.1/bin/test1.txt</stringProp>
+            <stringProp name="fileEncoding">UTF-8</stringProp>
+            <stringProp name="variableNames">number</stringProp>
+            <boolProp name="ignoreFirstLine">false</boolProp>
+            <stringProp name="delimiter">,</stringProp>
+            <boolProp name="quotedData">false</boolProp>
+            <boolProp name="recycle">true</boolProp>
+            <boolProp name="stopThread">false</boolProp>
+            <stringProp name="shareMode">shareMode.all</stringProp>
+          </CSVDataSet>
+          <hashTree/>
+          <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
+            <stringProp name="filename">C:/Users/Administrator/Desktop/apache-jmeter-5.1.1/bin/display.txt</stringProp>
+            <stringProp name="fileEncoding">UTF-8</stringProp>
+            <stringProp name="variableNames">display</stringProp>
+            <boolProp name="ignoreFirstLine">false</boolProp>
+            <stringProp name="delimiter">,</stringProp>
+            <boolProp name="quotedData">false</boolProp>
+            <boolProp name="recycle">true</boolProp>
+            <boolProp name="stopThread">false</boolProp>
+            <stringProp name="shareMode">shareMode.all</stringProp>
+          </CSVDataSet>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="换购专场" enabled="false">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">newapi.hezongyy.com</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">/goods/ad/byPage/0/promotional</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">hesytoken</stringProp>
+                <stringProp name="Header.value">4c70fad7-2185-11eb-9499-6c92bf4757fb</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="script">prev.setDataEncoding(&quot;utf-8&quot;);</stringProp>
+          </BeanShellPreProcessor>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-2024745369">&quot;code&quot;:&quot;000000&quot;</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
+            <stringProp name="filename">C:/Users/Administrator/Desktop/apache-jmeter-5.1.1/bin/test.txt</stringProp>
+            <stringProp name="fileEncoding">UTF-8</stringProp>
+            <stringProp name="variableNames">number</stringProp>
+            <boolProp name="ignoreFirstLine">false</boolProp>
+            <stringProp name="delimiter">,</stringProp>
+            <boolProp name="quotedData">false</boolProp>
+            <boolProp name="recycle">true</boolProp>
+            <boolProp name="stopThread">false</boolProp>
+            <stringProp name="shareMode">shareMode.all</stringProp>
+          </CSVDataSet>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="保健品专场" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&quot;page&quot;:2,&quot;display&quot;:${display},&quot;healthProduct&quot;:1}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">newapi.hezongyy.com</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">/goods/119/promotionalList</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">hesytoken</stringProp>
+                <stringProp name="Header.value">4c70fad7-2185-11eb-9499-6c92bf4757fb</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="script">prev.setDataEncoding(&quot;utf-8&quot;);</stringProp>
+          </BeanShellPreProcessor>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-2024745369">&quot;code&quot;:&quot;000000&quot;</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
+            <stringProp name="filename">C:/Users/Administrator/Desktop/apache-jmeter-5.1.1/bin/test1.txt</stringProp>
+            <stringProp name="fileEncoding">UTF-8</stringProp>
+            <stringProp name="variableNames">number</stringProp>
+            <boolProp name="ignoreFirstLine">false</boolProp>
+            <stringProp name="delimiter">,</stringProp>
+            <boolProp name="quotedData">false</boolProp>
+            <boolProp name="recycle">true</boolProp>
+            <boolProp name="stopThread">false</boolProp>
+            <stringProp name="shareMode">shareMode.all</stringProp>
+          </CSVDataSet>
+          <hashTree/>
+          <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
+            <stringProp name="filename">C:/Users/Administrator/Desktop/apache-jmeter-5.1.1/bin/display.txt</stringProp>
+            <stringProp name="fileEncoding">UTF-8</stringProp>
+            <stringProp name="variableNames">display</stringProp>
+            <boolProp name="ignoreFirstLine">false</boolProp>
+            <stringProp name="delimiter">,</stringProp>
+            <boolProp name="quotedData">false</boolProp>
+            <boolProp name="recycle">true</boolProp>
+            <boolProp name="stopThread">false</boolProp>
+            <stringProp name="shareMode">shareMode.all</stringProp>
+          </CSVDataSet>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="秒杀查询" enabled="false">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">172.16.0.91</stringProp>
+          <stringProp name="HTTPSampler.port">8888</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">/flashSale/flashSale/2</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-2024745369">&quot;code&quot;:&quot;000000&quot;</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="script">prev.setDataEncoding(&quot;utf-8&quot;);</stringProp>
+          </BeanShellPreProcessor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="结算购物车" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">[{&quot;goodsId&quot;:48241,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48237,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48235,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48233,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45702,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48983,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45699,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45700,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45701,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:2120,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:42134,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:42133,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:41754,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:48884,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:43519,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:32187,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:34746,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:38737,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:2126,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:2129,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:18135,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:2150,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:9821,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:40934,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:40378,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18158,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:2125,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:26661,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:2122,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:27248,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48717,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:49785,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48762,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45777,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:49855,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47706,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:30747,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47649,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:41211,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:49717,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:30867,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45870,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:49101,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:43609,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45742,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:41025,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:46850,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:46086,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45064,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:31419,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:43999,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:31399,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47277,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45058,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:49811,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:24873,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:43859,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:27345,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:21767,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:657,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:13878,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:513,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:26660,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:19276,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:25257,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:43843,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:34968,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:5681,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:37197,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:816,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:726,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:46487,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:18985,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:991,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:7622,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:14406,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:17131,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3261,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:8746,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:18057,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:333,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:29269,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:49531,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:45521,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:49530,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:26393,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:26176,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:44667,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:44668,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:39752,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:49402,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47540,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:7252,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:49506,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:3485,&quot;type&quot;:1,&quot;number&quot;:16},{&quot;goodsId&quot;:17994,&quot;type&quot;:1,&quot;number&quot;:16},{&quot;goodsId&quot;:48912,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:16116,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:19348,&quot;type&quot;:1,&quot;number&quot;:6},{&quot;goodsId&quot;:8691,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:2216,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3552,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:122,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3081,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3280,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3044,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3088,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:30842,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3246,&quot;type&quot;:1,&quot;number&quot;:15},{&quot;goodsId&quot;:866,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3620,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:5160,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3518,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4005,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:36930,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:4210,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:18042,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4308,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3858,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:6278,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:6175,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:24085,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3705,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:49938,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:4602,&quot;type&quot;:1,&quot;number&quot;:3},{&quot;goodsId&quot;:3228,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3175,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:2231,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:37066,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:8808,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:20162,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:20680,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:31788,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:17717,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:8684,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:16533,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:41999,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:8670,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:8549,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:320,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:579,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:8545,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:666,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3713,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:125,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:12066,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:30449,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:1078,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:930,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:16258,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45172,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:26870,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:16364,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:8809,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:1122,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3429,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3463,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4458,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18113,&quot;type&quot;:1,&quot;number&quot;:50},{&quot;goodsId&quot;:3981,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:49835,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:1200,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:2174,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:1199,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:17990,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:15999,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:16002,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:899,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18067,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:17987,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3235,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18055,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:5464,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:5465,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:1177,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:25201,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:20378,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:43309,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4077,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4444,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:707,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:690,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:40908,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4723,&quot;type&quot;:1,&quot;number&quot;:4},{&quot;goodsId&quot;:4763,&quot;type&quot;:1,&quot;number&quot;:4},{&quot;goodsId&quot;:42689,&quot;type&quot;:1,&quot;number&quot;:4},{&quot;goodsId&quot;:4419,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:5673,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:23422,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:13586,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:22360,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18069,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:6355,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3134,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:10683,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:449,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:361,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3803,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:16480,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4530,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4254,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:7908,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:46353,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4004,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4230,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:1106,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4660,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3216,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:14027,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:1144,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:9699,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:34163,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:5637,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18070,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:5827,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:4731,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:20157,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:38173,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:1173,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:35534,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4874,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:21943,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:28087,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:40384,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:17763,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:44689,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:45252,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:9697,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:44749,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:30884,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18044,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:8489,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45155,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:8482,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3568,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:25427,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:46790,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:8368,&quot;type&quot;:1,&quot;number&quot;:35},{&quot;goodsId&quot;:280,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:704,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:31232,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:281,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:34666,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:25286,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:43582,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:17934,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:897,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18115,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:339,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18012,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:16525,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:8505,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4633,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:31170,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:43709,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3750,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:30129,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:764,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:537,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:43701,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:19181,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:41745,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:18046,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:20854,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:23189,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:44795,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:31254,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:20829,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:8252,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:37013,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:1011,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:12645,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18066,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47929,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18100,&quot;type&quot;:1,&quot;number&quot;:6},{&quot;goodsId&quot;:8452,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3720,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3427,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:15932,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:39141,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:17955,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18551,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:31776,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:1113,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:46433,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3497,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:37104,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3780,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:1148,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3932,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:5403,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:7203,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:6447,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:5360,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:33634,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:1158,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:25321,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:31206,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:9088,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:34925,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:31167,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:366,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:27392,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:37243,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:43760,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:20087,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:4799,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:27299,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:9215,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:9216,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:4481,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:9213,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:27064,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:35487,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3509,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4020,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:1163,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:3117,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:7564,&quot;type&quot;:1,&quot;number&quot;:30},{&quot;goodsId&quot;:4098,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3161,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:21887,&quot;type&quot;:1,&quot;number&quot;:16},{&quot;goodsId&quot;:40498,&quot;type&quot;:1,&quot;number&quot;:14},{&quot;goodsId&quot;:13263,&quot;type&quot;:1,&quot;number&quot;:16},{&quot;goodsId&quot;:3310,&quot;type&quot;:1,&quot;number&quot;:16},{&quot;goodsId&quot;:42798,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:993,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:1003,&quot;type&quot;:1,&quot;number&quot;:40},{&quot;goodsId&quot;:814,&quot;type&quot;:1,&quot;number&quot;:20},{&quot;goodsId&quot;:912,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:23652,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:44955,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3903,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:18268,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:23653,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:10719,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:34706,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:161,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:41946,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:43900,&quot;type&quot;:1,&quot;number&quot;:20},{&quot;goodsId&quot;:3595,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:4350,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:47895,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:17590,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:28031,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:17601,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:48205,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:1070,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:29239,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18018,&quot;type&quot;:1,&quot;number&quot;:20},{&quot;goodsId&quot;:26521,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:955,&quot;type&quot;:1,&quot;number&quot;:20},{&quot;goodsId&quot;:16375,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:18017,&quot;type&quot;:1,&quot;number&quot;:20},{&quot;goodsId&quot;:19492,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:4791,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:8229,&quot;type&quot;:1,&quot;number&quot;:20},{&quot;goodsId&quot;:17950,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18041,&quot;type&quot;:1,&quot;number&quot;:8},{&quot;goodsId&quot;:3173,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:19928,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:1981,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:16430,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18008,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4065,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:32490,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:5473,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:40203,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:2144,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:4302,&quot;type&quot;:1,&quot;number&quot;:60},{&quot;goodsId&quot;:3159,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:4189,&quot;type&quot;:1,&quot;number&quot;:40},{&quot;goodsId&quot;:45082,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:26447,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:26448,&quot;type&quot;:4,&quot;number&quot;:10},{&quot;goodsId&quot;:16494,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:29353,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:524,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:31371,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:29209,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:17244,&quot;type&quot;:4,&quot;number&quot;:5},{&quot;goodsId&quot;:9840,&quot;type&quot;:4,&quot;number&quot;:15},{&quot;goodsId&quot;:26743,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:5158,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:40077,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:22634,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:22004,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:32146,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:45164,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:1206,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:18072,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:578,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:3450,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:3440,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:3068,&quot;type&quot;:4,&quot;number&quot;:10},{&quot;goodsId&quot;:714,&quot;type&quot;:4,&quot;number&quot;:20},{&quot;goodsId&quot;:18059,&quot;type&quot;:4,&quot;number&quot;:20},{&quot;goodsId&quot;:43195,&quot;type&quot;:4,&quot;number&quot;:10},{&quot;goodsId&quot;:9838,&quot;type&quot;:4,&quot;number&quot;:20},{&quot;goodsId&quot;:1990,&quot;type&quot;:4,&quot;number&quot;:2}]</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">172.16.0.91</stringProp>
+          <stringProp name="HTTPSampler.port">8888</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">/settlement/placeOrder/settleAccount</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
+            <stringProp name="JSONPostProcessor.referenceNames">content</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.content</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+            <stringProp name="Scope.variable"></stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">hesytoken</stringProp>
+                <stringProp name="Header.value">18b1499a-21a2-11eb-87ec-6c92bf464a38</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-2024745369">&quot;code&quot;:&quot;000000&quot;</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="script">prev.setDataEncoding(&quot;utf-8&quot;);</stringProp>
+          </BeanShellPreProcessor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="结算购物车118" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">[{&quot;goodsId&quot;:48241,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48237,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48235,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48233,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45702,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48983,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45699,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45700,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45701,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:2120,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:42134,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:42133,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:41754,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:48884,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:43519,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:32187,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:34746,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:38737,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:2126,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:2129,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:18135,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:2150,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:9821,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:40934,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:40378,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18158,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:2125,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:26661,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:2122,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:27248,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48717,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:49785,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48762,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45777,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:49855,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47706,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:30747,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47649,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:41211,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:49717,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:30867,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45870,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:49101,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:43609,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45742,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:41025,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:46850,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:46086,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45064,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:31419,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:43999,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:31399,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47277,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45058,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:49811,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:24873,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:43859,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:27345,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:21767,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:657,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:13878,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:513,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:26660,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:19276,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:25257,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:43843,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:34968,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:5681,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:37197,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:816,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:726,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:46487,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:18985,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:991,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:7622,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:14406,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:17131,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3261,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:8746,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:18057,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:333,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:29269,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:49531,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:45521,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:49530,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:26393,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:26176,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:44667,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:44668,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:39752,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:49402,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47540,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:7252,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:49506,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:3485,&quot;type&quot;:1,&quot;number&quot;:16},{&quot;goodsId&quot;:17994,&quot;type&quot;:1,&quot;number&quot;:16},{&quot;goodsId&quot;:48912,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:16116,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:19348,&quot;type&quot;:1,&quot;number&quot;:6},{&quot;goodsId&quot;:8691,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:2216,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3552,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:122,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3081,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3280,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3044,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3088,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:30842,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3246,&quot;type&quot;:1,&quot;number&quot;:15},{&quot;goodsId&quot;:866,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3620,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:5160,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3518,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4005,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:36930,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:4210,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:18042,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4308,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3858,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:6278,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:6175,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:24085,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3705,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:49938,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:4602,&quot;type&quot;:1,&quot;number&quot;:3},{&quot;goodsId&quot;:3228,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3175,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:2231,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:37066,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:8808,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:20162,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:20680,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:31788,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:17717,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:8684,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:16533,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:41999,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:8670,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:8549,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:320,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:579,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:8545,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:666,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3713,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:125,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:12066,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:30449,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:1078,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:930,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:16258,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45172,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:26870,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:16364,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:8809,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:1122,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3429,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3463,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4458,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18113,&quot;type&quot;:1,&quot;number&quot;:50},{&quot;goodsId&quot;:3981,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:49835,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:1200,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:2174,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:1199,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:17990,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:15999,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:16002,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:899,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18067,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:17987,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3235,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18055,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:5464,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:5465,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:1177,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:25201,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:20378,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:43309,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4077,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4444,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:707,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:690,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:40908,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4723,&quot;type&quot;:1,&quot;number&quot;:4},{&quot;goodsId&quot;:4763,&quot;type&quot;:1,&quot;number&quot;:4},{&quot;goodsId&quot;:42689,&quot;type&quot;:1,&quot;number&quot;:4},{&quot;goodsId&quot;:4419,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:5673,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:23422,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:13586,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:22360,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18069,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:6355,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3134,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:10683,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:449,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:361,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3803,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:16480,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4530,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4254,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:7908,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:46353,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4004,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4230,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:1106,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4660,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3216,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:14027,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:1144,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:9699,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:34163,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:5637,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18070,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:5827,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:4731,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:20157,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:38173,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:1173,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:35534,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4874,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:21943,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:28087,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:40384,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:17763,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:44689,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:45252,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:9697,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:44749,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:30884,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18044,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:8489,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45155,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:8482,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3568,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:25427,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:46790,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:8368,&quot;type&quot;:1,&quot;number&quot;:35},{&quot;goodsId&quot;:280,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:704,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:31232,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:281,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:34666,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:25286,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:43582,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:17934,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:897,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18115,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:339,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18012,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:16525,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:8505,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4633,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:31170,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:43709,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3750,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:30129,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:764,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:537,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:43701,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:19181,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:41745,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:18046,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:20854,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:23189,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:44795,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:31254,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:20829,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:8252,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:37013,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:1011,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:12645,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18066,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47929,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18100,&quot;type&quot;:1,&quot;number&quot;:6},{&quot;goodsId&quot;:8452,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3720,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3427,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:15932,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:39141,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:17955,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18551,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:31776,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:1113,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:46433,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3497,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:37104,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3780,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:1148,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3932,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:5403,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:7203,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:6447,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:5360,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:33634,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:1158,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:25321,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:31206,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:9088,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:34925,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:31167,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:366,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:27392,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:37243,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:43760,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:20087,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:4799,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:27299,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:9215,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:9216,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:4481,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:9213,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:27064,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:35487,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3509,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4020,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:1163,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:3117,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:7564,&quot;type&quot;:1,&quot;number&quot;:30},{&quot;goodsId&quot;:4098,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3161,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:21887,&quot;type&quot;:1,&quot;number&quot;:16},{&quot;goodsId&quot;:40498,&quot;type&quot;:1,&quot;number&quot;:14},{&quot;goodsId&quot;:13263,&quot;type&quot;:1,&quot;number&quot;:16},{&quot;goodsId&quot;:3310,&quot;type&quot;:1,&quot;number&quot;:16},{&quot;goodsId&quot;:42798,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:993,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:1003,&quot;type&quot;:1,&quot;number&quot;:40},{&quot;goodsId&quot;:814,&quot;type&quot;:1,&quot;number&quot;:20},{&quot;goodsId&quot;:912,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:23652,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:44955,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3903,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:18268,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:23653,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:10719,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:34706,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:161,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:41946,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:43900,&quot;type&quot;:1,&quot;number&quot;:20},{&quot;goodsId&quot;:3595,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:4350,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:47895,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:17590,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:28031,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:17601,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:48205,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:1070,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:29239,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18018,&quot;type&quot;:1,&quot;number&quot;:20},{&quot;goodsId&quot;:26521,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:955,&quot;type&quot;:1,&quot;number&quot;:20},{&quot;goodsId&quot;:16375,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:18017,&quot;type&quot;:1,&quot;number&quot;:20},{&quot;goodsId&quot;:19492,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:4791,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:8229,&quot;type&quot;:1,&quot;number&quot;:20},{&quot;goodsId&quot;:17950,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18041,&quot;type&quot;:1,&quot;number&quot;:8},{&quot;goodsId&quot;:3173,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:19928,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:1981,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:16430,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18008,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4065,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:32490,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:5473,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:40203,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:2144,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:4302,&quot;type&quot;:1,&quot;number&quot;:60},{&quot;goodsId&quot;:3159,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:4189,&quot;type&quot;:1,&quot;number&quot;:40},{&quot;goodsId&quot;:45082,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:26447,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:26448,&quot;type&quot;:4,&quot;number&quot;:10},{&quot;goodsId&quot;:16494,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:29353,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:524,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:31371,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:29209,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:17244,&quot;type&quot;:4,&quot;number&quot;:5},{&quot;goodsId&quot;:9840,&quot;type&quot;:4,&quot;number&quot;:15},{&quot;goodsId&quot;:26743,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:5158,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:40077,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:22634,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:22004,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:32146,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:45164,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:1206,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:18072,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:578,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:3450,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:3440,&quot;type&quot;:4,&quot;number&quot;:1},{&quot;goodsId&quot;:3068,&quot;type&quot;:4,&quot;number&quot;:10},{&quot;goodsId&quot;:714,&quot;type&quot;:4,&quot;number&quot;:20},{&quot;goodsId&quot;:18059,&quot;type&quot;:4,&quot;number&quot;:20},{&quot;goodsId&quot;:43195,&quot;type&quot;:4,&quot;number&quot;:10},{&quot;goodsId&quot;:9838,&quot;type&quot;:4,&quot;number&quot;:20},{&quot;goodsId&quot;:1990,&quot;type&quot;:4,&quot;number&quot;:2}]</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">172.16.0.96</stringProp>
+          <stringProp name="HTTPSampler.port">8888</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">/settlement/placeOrder/settleAccount</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
+            <stringProp name="JSONPostProcessor.referenceNames">content</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.content</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+            <stringProp name="Scope.variable"></stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">hesytoken</stringProp>
+                <stringProp name="Header.value">18b1499a-21a2-11eb-87ec-6c92bf464a38</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-2024745369">&quot;code&quot;:&quot;000000&quot;</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="script">prev.setDataEncoding(&quot;utf-8&quot;);</stringProp>
+          </BeanShellPreProcessor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="购物车特价商品" enabled="false">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">newapi.hezongyy.com</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">/settlement/goodsCart/getSpecialSaleBasket</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">hesytoken</stringProp>
+                <stringProp name="Header.value">18b1499a-21a2-11eb-87ec-6c92bf464a38</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-2024745369">&quot;code&quot;:&quot;000000&quot;</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="script">prev.setDataEncoding(&quot;utf-8&quot;);</stringProp>
+          </BeanShellPreProcessor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="购物车秒杀商品" enabled="false">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">newapi.hezongyy.com</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">/settlement/goodsCart/getSeckillBasket</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-2024745369">&quot;code&quot;:&quot;000000&quot;</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="script">prev.setDataEncoding(&quot;utf-8&quot;);</stringProp>
+          </BeanShellPreProcessor>
+          <hashTree/>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">hesytoken</stringProp>
+                <stringProp name="Header.value">18b1499a-21a2-11eb-87ec-6c92bf464a38</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="购物车阶梯价商品" enabled="false">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">newapi.hezongyy.com</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">/settlement/goodsCart/getLadderBasket</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-2024745369">&quot;code&quot;:&quot;000000&quot;</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="script">prev.setDataEncoding(&quot;utf-8&quot;);</stringProp>
+          </BeanShellPreProcessor>
+          <hashTree/>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">hesytoken</stringProp>
+                <stringProp name="Header.value">18b1499a-21a2-11eb-87ec-6c92bf464a38</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="购物车随机价商品" enabled="false">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">newapi.hezongyy.com</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">/settlement/goodsCart/getRandomPriceBasket</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-2024745369">&quot;code&quot;:&quot;000000&quot;</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="script">prev.setDataEncoding(&quot;utf-8&quot;);</stringProp>
+          </BeanShellPreProcessor>
+          <hashTree/>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">hesytoken</stringProp>
+                <stringProp name="Header.value">18b1499a-21a2-11eb-87ec-6c92bf464a38</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="购物车直播商品" enabled="false">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">newapi.hezongyy.com</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">/settlement/goodsCart/getLiveStreamBasket</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-2024745369">&quot;code&quot;:&quot;000000&quot;</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="script">prev.setDataEncoding(&quot;utf-8&quot;);</stringProp>
+          </BeanShellPreProcessor>
+          <hashTree/>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">hesytoken</stringProp>
+                <stringProp name="Header.value">18b1499a-21a2-11eb-87ec-6c92bf464a38</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="添加秒杀购物车" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&quot;goodsId&quot;:25,&quot;number&quot;:10,&quot;infoId&quot;:31}&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">171.221.236.41</stringProp>
+          <stringProp name="HTTPSampler.port">10003</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">/flashSale/flashSale/addCart</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
+            <stringProp name="JSONPostProcessor.referenceNames">content</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.content</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+            <stringProp name="Scope.variable"></stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">hesytoken</stringProp>
+                <stringProp name="Header.value">1b5069f5-3540-11eb-9ee8-0a0027000009</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="false">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-2024745369">&quot;code&quot;:&quot;000000&quot;</stringProp>
+              <stringProp name="-702312094">&quot;content&quot;:1</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="script">prev.setDataEncoding(&quot;utf-8&quot;);</stringProp>
+          </BeanShellPreProcessor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="添加秒杀购物车回调" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&quot;content&quot;:&quot;{\&quot;acceptanceBill\&quot;:1897342267,\&quot;goodsId\&quot;:22074,\&quot;infoId\&quot;:2,\&quot;number\&quot;:10,\&quot;token\&quot;:\&quot;2db0c2da-11ff-11eb-8dea-7cd30ac44e02\&quot;,\&quot;userId\&quot;:47910}&quot;,&quot;id&quot;:729449274113212417}&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">newapi.hezongyy.com</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">/goods/flashSale/acceptanceBill</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">hesytoken</stringProp>
+                <stringProp name="Header.value">2db0c2da-11ff-11eb-8dea-7cd30ac44e02</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">systemsign</stringProp>
+                <stringProp name="Header.value">46E308881959BAE930F84A1E74AE46741E46C8B0</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">systemtimestamp</stringProp>
+                <stringProp name="Header.value">1603109692</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="提交订单" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&quot;channel&quot;:&quot;0&quot;,&quot;type&quot;:&quot;1&quot;,&quot;invoice&quot;:&quot;0&quot;,&quot;remark&quot;:&quot;&quot;,&quot;referralCode&quot;:&quot;&quot;,&quot;cartParams&quot;:[{&quot;goodsId&quot;:8229,&quot;type&quot;:1,&quot;number&quot;:20},{&quot;goodsId&quot;:4799,&quot;type&quot;:1,&quot;number&quot;:20},{&quot;goodsId&quot;:41301,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:41492,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:41462,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:41382,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:41351,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:42106,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47957,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:47956,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:47949,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:47943,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:43580,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:43932,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:44546,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:16945,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:21910,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:46408,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:41143,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:41023,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:41004,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:41507,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:41463,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:41427,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:41385,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:41412,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:41355,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:21914,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47391,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47952,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:44986,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:44137,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:44136,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:43564,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:42120,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:43878,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:43942,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:15572,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:14850,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:16941,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:46836,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4192,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:41359,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:42451,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:42102,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47892,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47894,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48450,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48449,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48978,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48976,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48974,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48977,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48975,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:49010,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47639,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47637,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47514,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48881,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48865,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48818,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:44430,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:41002,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:24816,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:43213,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:35135,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:26110,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:9786,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:24082,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:193,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:47466,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47429,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47619,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47205,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:43606,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:44919,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:44920,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:40089,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:40733,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:40732,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:38492,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:49160,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:49168,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:49069,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:49068,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:30319,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48883,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:26104,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:21543,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:13548,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:1003,&quot;type&quot;:1,&quot;number&quot;:20},{&quot;goodsId&quot;:49159,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48928,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48983,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45209,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:45360,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45140,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:8374,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:8373,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3606,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3574,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:47378,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47638,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:43607,&quot;type&quot;:1,&quot;number&quot;:5},{&quot;goodsId&quot;:44349,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:44403,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:44348,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:39459,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:39202,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:32356,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:29308,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:49167,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:49201,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:40726,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:38668,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:9816,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:6219,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3798,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4206,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:4088,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47376,&quot;type&quot;:1,&quot;number&quot;:4},{&quot;goodsId&quot;:47636,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48426,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47547,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48864,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45242,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:42827,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:43214,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:33253,&quot;type&quot;:1,&quot;number&quot;:21},{&quot;goodsId&quot;:32865,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:30312,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:24259,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:3227,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:3273,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:47875,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:43215,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:40559,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:40735,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:40734,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:37623,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4763,&quot;type&quot;:1,&quot;number&quot;:4},{&quot;goodsId&quot;:11279,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:4723,&quot;type&quot;:1,&quot;number&quot;:4},{&quot;goodsId&quot;:49158,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:48981,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45107,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:18112,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:8137,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45241,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45239,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45228,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:49011,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45243,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45245,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45229,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45238,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45244,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45231,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45234,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:45235,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:45236,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:40768,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:43845,&quot;type&quot;:1,&quot;number&quot;:12},{&quot;goodsId&quot;:40727,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:40730,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:40560,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:39454,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:39460,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:43117,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:43116,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:39456,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:40729,&quot;type&quot;:1,&quot;number&quot;:3},{&quot;goodsId&quot;:37624,&quot;type&quot;:1,&quot;number&quot;:4},{&quot;goodsId&quot;:37526,&quot;type&quot;:1,&quot;number&quot;:4},{&quot;goodsId&quot;:40765,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48153,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48623,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:47206,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:28044,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:25064,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:38940,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:40263,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:43036,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:30942,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:30943,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:40746,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:44918,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48182,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:44847,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:44850,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:45183,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:14932,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:40380,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48334,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:44974,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:44977,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:44975,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:44976,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:44848,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:44849,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:40766,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:48152,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:40764,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48154,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:40761,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:40763,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:48954,&quot;type&quot;:1,&quot;number&quot;:1},{&quot;goodsId&quot;:48971,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:48970,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:48972,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:48973,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:48951,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:32468,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:48953,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:48805,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:30436,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:3173,&quot;type&quot;:1,&quot;number&quot;:10},{&quot;goodsId&quot;:18115,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:1990,&quot;type&quot;:1,&quot;number&quot;:2},{&quot;goodsId&quot;:18320,&quot;type&quot;:1,&quot;number&quot;:2}]}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">8.129.66.139</stringProp>
+          <stringProp name="HTTPSampler.port">8888</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">/settlement/placeOrder/submitOrder</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="false">
+            <stringProp name="JSONPostProcessor.referenceNames">content</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.content</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+            <stringProp name="Scope.variable"></stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">hesytoken</stringProp>
+                <stringProp name="Header.value">b1d4bc90-1d83-11eb-b5d6-7cd30adaf2da</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">systemtimestamp</stringProp>
+                <stringProp name="Header.value">A458D0CF516EABF15513D2CE34B1B299CCB004E5</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">systemsign</stringProp>
+                <stringProp name="Header.value">1602579586</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-2024745369">&quot;code&quot;:&quot;000000&quot;</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="script">prev.setDataEncoding(&quot;utf-8&quot;);</stringProp>
+          </BeanShellPreProcessor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="大数据推送" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&quot;content&quot;:&quot;{\&quot;biz\&quot;:\&quot;M003\&quot;,\&quot;brandId\&quot;:0,\&quot;clientType\&quot;:\&quot;0\&quot;,\&quot;customerId\&quot;:3442,\&quot;firstCommodityCode\&quot;:0,\&quot;secondCommodityCode\&quot;:0,\&quot;thirdCommodityCode\&quot;:0,\&quot;type\&quot;:\&quot;1\&quot;,\&quot;medicineIds\&quot;:[41745]}&quot;,&quot;id&quot;:667187624288288769}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">newapi.hezongyy.com</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">/bigdata/mixedPush</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="false">
+            <stringProp name="JSONPostProcessor.referenceNames">content</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.content</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+            <stringProp name="Scope.variable"></stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">hesytoken</stringProp>
+                <stringProp name="Header.value">ef8f3957-0d2b-11eb-bd6e-0c42a130f74e</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">systemtimestamp</stringProp>
+                <stringProp name="Header.value">A458D0CF516EABF15513D2CE34B1B299CCB004E5</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">systemsign</stringProp>
+                <stringProp name="Header.value">1602579586</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="随机特价" enabled="false">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">newapi.hezongyy.com</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">goods/RandomPrice/api</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="false">
+            <stringProp name="JSONPostProcessor.referenceNames">content</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.content</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+            <stringProp name="Scope.variable"></stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">hesytoken</stringProp>
+                <stringProp name="Header.value">ef8f3957-0d2b-11eb-bd6e-0c42a130f74e</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">systemtimestamp</stringProp>
+                <stringProp name="Header.value">A458D0CF516EABF15513D2CE34B1B299CCB004E5</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">systemsign</stringProp>
+                <stringProp name="Header.value">1602579586</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="大屏PC1" enabled="false">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">dc.datav.aliyun.com</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/v3/multiple/266af661a38601907bb10305d3d0ef47/100585</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="大屏APP1" enabled="false">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">dc.datav.aliyun.com</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/v3/multiple/1da245b785c4fd81695781baeb08c39f/99414</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="商品" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&quot;goodsIdList&quot;:[&quot;98380&quot;,&quot;19900&quot;,&quot;181150&quot;,&quot;47910&quot;,&quot;152160&quot;,&quot;7140&quot;,&quot;31730&quot;,&quot;250650&quot;,&quot;450820&quot;,&quot;488840&quot;,&quot;304360&quot;,&quot;488050&quot;,&quot;489530&quot;,&quot;324680&quot;,&quot;489510&quot;],&quot;limitSize&quot;:15,&quot;limitStart&quot;:0}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">newapi.hezongyy.com</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">/goods/api/goods</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="false">
+            <stringProp name="JSONPostProcessor.referenceNames">content</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.content</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+            <stringProp name="Scope.variable"></stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">hesytoken</stringProp>
+                <stringProp name="Header.value">ef8f3957-0d2b-11eb-bd6e-0c42a130f74e</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">systemtimestamp</stringProp>
+                <stringProp name="Header.value">A458D0CF516EABF15513D2CE34B1B299CCB004E5</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">systemsign</stringProp>
+                <stringProp name="Header.value">1602579586</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="加购物车" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&quot;goodsId&quot;:484,&quot;number&quot;:5,&quot;infoId&quot;:32}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">newapi.hezongyy.com</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">/goods/flashSale/addCart</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
+            <stringProp name="JSONPostProcessor.referenceNames">content</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.content</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+            <stringProp name="Scope.variable"></stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">hesytoken</stringProp>
+                <stringProp name="Header.value">954c266b-0ceb-11eb-bd6e-0c42a130f74e</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="广告页" enabled="false">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">newapi.hezongyy.com</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">goods/ad/byPage/0/index</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
+            <stringProp name="JSONPostProcessor.referenceNames">content</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.content</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+            <stringProp name="Scope.variable"></stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">hesytoken</stringProp>
+                <stringProp name="Header.value">3bc14832-0e08-11eb-8dea-7cd30ac44e02</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="活动阶梯价信息" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&quot;isChoose&quot;:0,&quot;pageNumber&quot;:1,&quot;pageSize&quot;:10}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">newapi.hezongyy.com</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">/sale/ladderPrice/searchList</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="false">
+            <stringProp name="JSONPostProcessor.referenceNames">content</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.content</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+            <stringProp name="Scope.variable"></stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">hesytoken</stringProp>
+                <stringProp name="Header.value">9162e922-0de0-11eb-8dea-7cd30ac44e02</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">systemtimestamp</stringProp>
+                <stringProp name="Header.value">A458D0CF516EABF15513D2CE34B1B299CCB004E5</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">systemsign</stringProp>
+                <stringProp name="Header.value">1602579586</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="通过票据获取平台用户信息" enabled="false">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">newapi.hezongyy.com</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">/users/SingleSignOn/find/ef8f3957-0d2b-11eb-bd6e-0c42a130f74e</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">true</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="活动促销商品信息" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&quot;isGift&quot;:0, &quot;isChoose&quot;:0, &quot;drugType&quot;:0, &quot;pageNumber&quot;:1, &quot;pageSize&quot;:10}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">newapi.hezongyy.com</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+          <stringProp name="HTTPSampler.path">/sale/promotion/promotionActivity</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="false">
+            <stringProp name="JSONPostProcessor.referenceNames">content</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.content</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+            <stringProp name="Scope.variable"></stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">hesytoken</stringProp>
+                <stringProp name="Header.value">ef8f3957-0d2b-11eb-bd6e-0c42a130f74e</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">systemtimestamp</stringProp>
+                <stringProp name="Header.value">A458D0CF516EABF15513D2CE34B1B299CCB004E5</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">systemsign</stringProp>
+                <stringProp name="Header.value">1602579586</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+        </hashTree>
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+        <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="Aggregate Report" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+        <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+        <kg.apc.jmeter.vizualizers.CorrectedResultCollector guiclass="kg.apc.jmeter.vizualizers.ThreadsStateOverTimeGui" testclass="kg.apc.jmeter.vizualizers.CorrectedResultCollector" testname="jp@gc - Active Threads Over Time" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+          <longProp name="interval_grouping">500</longProp>
+          <boolProp name="graph_aggregated">false</boolProp>
+          <stringProp name="include_sample_labels"></stringProp>
+          <stringProp name="exclude_sample_labels"></stringProp>
+          <stringProp name="start_offset"></stringProp>
+          <stringProp name="end_offset"></stringProp>
+          <boolProp name="include_checkbox_state">false</boolProp>
+          <boolProp name="exclude_checkbox_state">false</boolProp>
+        </kg.apc.jmeter.vizualizers.CorrectedResultCollector>
+        <hashTree/>
+        <kg.apc.jmeter.vizualizers.CorrectedResultCollector guiclass="kg.apc.jmeter.vizualizers.ResponseTimesOverTimeGui" testclass="kg.apc.jmeter.vizualizers.CorrectedResultCollector" testname="jp@gc - Response Times Over Time" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+          <longProp name="interval_grouping">500</longProp>
+          <boolProp name="graph_aggregated">false</boolProp>
+          <stringProp name="include_sample_labels"></stringProp>
+          <stringProp name="exclude_sample_labels"></stringProp>
+          <stringProp name="start_offset"></stringProp>
+          <stringProp name="end_offset"></stringProp>
+          <boolProp name="include_checkbox_state">false</boolProp>
+          <boolProp name="exclude_checkbox_state">false</boolProp>
+        </kg.apc.jmeter.vizualizers.CorrectedResultCollector>
+        <hashTree/>
+        <kg.apc.jmeter.vizualizers.CorrectedResultCollector guiclass="kg.apc.jmeter.vizualizers.TransactionsPerSecondGui" testclass="kg.apc.jmeter.vizualizers.CorrectedResultCollector" testname="jp@gc - Transactions per Second" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+          <longProp name="interval_grouping">1000</longProp>
+          <boolProp name="graph_aggregated">false</boolProp>
+          <stringProp name="include_sample_labels"></stringProp>
+          <stringProp name="exclude_sample_labels"></stringProp>
+          <stringProp name="start_offset"></stringProp>
+          <stringProp name="end_offset"></stringProp>
+          <boolProp name="include_checkbox_state">false</boolProp>
+          <boolProp name="exclude_checkbox_state">false</boolProp>
+        </kg.apc.jmeter.vizualizers.CorrectedResultCollector>
+        <hashTree/>
+        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="false">
+          <stringProp name="filename">E:/Jmeter/apache-jmeter-5.1.1/bin/playData/UserID.txt</stringProp>
+          <stringProp name="fileEncoding">utf-8</stringProp>
+          <stringProp name="variableNames">username</stringProp>
+          <boolProp name="ignoreFirstLine">false</boolProp>
+          <stringProp name="delimiter">,</stringProp>
+          <boolProp name="quotedData">false</boolProp>
+          <boolProp name="recycle">true</boolProp>
+          <boolProp name="stopThread">false</boolProp>
+          <stringProp name="shareMode">shareMode.all</stringProp>
+        </CSVDataSet>
+        <hashTree/>
+        <kg.apc.jmeter.vizualizers.CorrectedResultCollector guiclass="kg.apc.jmeter.vizualizers.HitsPerSecondGui" testclass="kg.apc.jmeter.vizualizers.CorrectedResultCollector" testname="jp@gc - Hits per Second" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+          <longProp name="interval_grouping">1000</longProp>
+          <boolProp name="graph_aggregated">false</boolProp>
+          <stringProp name="include_sample_labels"></stringProp>
+          <stringProp name="exclude_sample_labels"></stringProp>
+          <stringProp name="start_offset"></stringProp>
+          <stringProp name="end_offset"></stringProp>
+          <boolProp name="include_checkbox_state">false</boolProp>
+          <boolProp name="exclude_checkbox_state">false</boolProp>
+        </kg.apc.jmeter.vizualizers.CorrectedResultCollector>
+        <hashTree/>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>
