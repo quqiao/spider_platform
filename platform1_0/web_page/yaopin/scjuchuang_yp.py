@@ -36,35 +36,36 @@ def crawl_scjuchuan_py():
     # 模拟点击“登录”按钮
     driver.find_element_by_class_name('loginBtn').click()
     time.sleep(1)
-    for i in range(1, 2):
+    driver.maximize_window()  # 进行全屏展示
+    time.sleep(1)
+    for i in range(1, 430):
         driver.get("https://www.scjuchuang.com/goods?attr=3&page=%d" % i)
         time.sleep(3)  # 停顿3秒等待页面加载完毕！！！（必须留有页面加载的时间，否则获得的源代码会不完整。）
         html_sourcode = driver.page_source
         html = etree.HTML(html_sourcode, etree.HTMLParser())
         for j1 in range(1, 21):
-            jg1 = html.xpath('/html/body/div[9]/ul/li[%d]/div[1]/span[2]/text()' % j1)
+            jg1 = html.xpath('/html/body/div[8]/ul/li[%d]/div[1]/span[2]/text()' % j1)
             price1 = ''.join(jg1)
             list_price1.append(price1)
-
         for n in range(1, 21):
-            cj = html.xpath('/html/body/div[9]/ul/li[%d]/p[1]/text()' % n)
+            cj = html.xpath('/html/body/div[8]/ul/li[%d]/p[1]/text()' % n)
             cj1 = ''.join(cj)
             list_compamy.append(cj1)
         for m in range(1, 21):
-            mz = html.xpath('/html/body/div[9]/ul/li[%d]/div[3]/text()' % m)
+            mz = html.xpath('/html/body/div[8]/ul/li[%d]/div[3]/text()' % m)
             mz1 = ''.join(mz)
             list_mingzi.append(mz1)
         for g in range(1, 21):
-            gg = html.xpath('/html/body/div[9]/ul/li[%d]/p[2]/text()' % g)
+            gg = html.xpath('/html/body/div[8]/ul/li[%d]/p[2]/text()' % g)
             gg1 = ''.join(gg)
             list_guige.append(gg1)
         for x in range(1, 21):
-            xq = html.xpath('/html/body/div[9]/ul/li[%d]/p[3]/span[1]/text()' % x)
+            xq = html.xpath('/html/body/div[8]/ul/li[%d]/p[3]/span[1]/text()' % x)
             xq1 = ''.join(xq)
             list_xiaoqi.append(xq1)
 
         for j2 in range(1, 21):
-            jg2 = html.xpath('/html/body/div[9]/ul/li[%d]/div[1]/span/text()' % j2)
+            jg2 = html.xpath('/html/body/div[8]/ul/li[%d]/div[1]/span[1]/text()' % j2)
             price2 = ''.join(jg2)
             list_price2.append(price2)
 
@@ -78,29 +79,29 @@ def save_csv():
     # dataframe.to_csv("hezongyy_20201111.csv", index=False, sep=',')  # 将DataFrame存储为csv,index表示是否显示行名，default=True
 
     """通过xlsx保存数据"""
-    # data = {'原价': list_jiage, '特价': list_jiage2, '药名': list_mingzi, '厂家': list_compamy, '规格': list_guige, '效期': list_xiaoqi}
-    # dataframe = pd.DataFrame(data, columns=['原价', '特价', '药名', '厂家', '规格', '效期'])
-    # dataframe.to_excel("hezongyy_20201111.xlsx", encoding='utf-8', index=False, header=True, sheet_name='聚创')
-    # print(dataframe)
+    data = {'原价': list_price1, '特价': list_price2, '药名': list_mingzi, '厂家': list_compamy, '规格': list_guige, '效期': list_xiaoqi}
+    dataframe = pd.DataFrame(data, columns=['原价', '特价', '药名', '厂家', '规格', '效期'])
+    dataframe.to_excel("scjuchuang_yp_20210301.xlsx", encoding='utf-8', index=False, header=True, sheet_name='聚创')
+    print(dataframe)
 
-    """在已有的excel中加入新的sheet保存数据"""
-    nowtime = time.strftime('%Y%m%d', time.localtime(time.time()))  # 获取当前时间并转化为类似20201217的格式
-    try:
-        data = {'原价': list_price1, '特价': list_price2, '药名': list_mingzi, '厂家': list_compamy, '规格': list_guige,
-                '效期': list_xiaoqi}
-        wb = openpyxl.load_workbook('F:/django/spider_platform/DataAnalysis/data/medical_data_%s.xlsx' % nowtime)
-        writer = pd.ExcelWriter('F:/django/spider_platform/DataAnalysis/data/medical_data_%s.xlsx' % nowtime,
-                                engine='openpyxl')  # 如果有多个模块可以读写excel文件，这里要指定engine，否则可能会报错
-        writer.book = wb  # 没有这个语句的话excel表将完全被覆盖
-        df = pd.DataFrame(data, columns=['原价', '特价', '药名', '厂家', '规格',
-                                         '效期'])  # 如果有相同名字的工作表，新添加的将命名为Sheet21，如果Sheet21也有了就命名为Sheet22，不会覆盖原来的工作表
-        df.to_excel(writer, encoding='utf-8', index=False, header=True, sheet_name='聚创')
-        writer.save()
-        writer.close()
-    except FileNotFoundError:
-        data = {'原价': list_price1, '特价': list_price2, '药名': list_mingzi, '厂家': list_compamy, '规格': list_guige, '效期': list_xiaoqi}
-        dataframe = pd.DataFrame(data, columns=['原价', '特价', '药名', '厂家', '规格', '效期'])
-        dataframe.to_excel('F:/django/spider_platform/DataAnalysis/data/medical_data_%s.xlsx' % nowtime, encoding='utf-8', index=False, header=True, sheet_name='聚创')
+    # """在已有的excel中加入新的sheet保存数据"""
+    # nowtime = time.strftime('%Y%m%d', time.localtime(time.time()))  # 获取当前时间并转化为类似20201217的格式
+    # try:
+    #     data = {'原价': list_price1, '特价': list_price2, '药名': list_mingzi, '厂家': list_compamy, '规格': list_guige,
+    #             '效期': list_xiaoqi}
+    #     wb = openpyxl.load_workbook('F:/django/spider_platform/DataAnalysis/data/medical_data_%s.xlsx' % nowtime)
+    #     writer = pd.ExcelWriter('F:/django/spider_platform/DataAnalysis/data/medical_data_%s.xlsx' % nowtime,
+    #                             engine='openpyxl')  # 如果有多个模块可以读写excel文件，这里要指定engine，否则可能会报错
+    #     writer.book = wb  # 没有这个语句的话excel表将完全被覆盖
+    #     df = pd.DataFrame(data, columns=['原价', '特价', '药名', '厂家', '规格',
+    #                                      '效期'])  # 如果有相同名字的工作表，新添加的将命名为Sheet21，如果Sheet21也有了就命名为Sheet22，不会覆盖原来的工作表
+    #     df.to_excel(writer, encoding='utf-8', index=False, header=True, sheet_name='聚创')
+    #     writer.save()
+    #     writer.close()
+    # except FileNotFoundError:
+    #     data = {'原价': list_price1, '特价': list_price2, '药名': list_mingzi, '厂家': list_compamy, '规格': list_guige, '效期': list_xiaoqi}
+    #     dataframe = pd.DataFrame(data, columns=['原价', '特价', '药名', '厂家', '规格', '效期'])
+    #     dataframe.to_excel('F:/django/spider_platform/DataAnalysis/data/medical_data_%s.xlsx' % nowtime, encoding='utf-8', index=False, header=True, sheet_name='聚创')
 
 """存储到mysql数据库中"""
 def save_mysql():

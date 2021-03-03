@@ -125,6 +125,6 @@ def save_mysql():
 
 
 
-if __name__ == '__main__':  # 验证拼接后的正确性
+if __name__=='__main__':  # 验证拼接后的正确性
     crawl_hezongyy_yp()
     save_mysql()
