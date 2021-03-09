@@ -19,7 +19,7 @@ def clear_list():
     list_compamy.clear()
     list_xiaoqi.clear()
 
-def crawl_hezongyy(count):
+def crawl_ysb_lyg(count):
     executable_path = "C:/Users/Administrator/AppData/Local/Google/Chrome/Application/chromedriver.exe"
     driver = webdriver.Chrome(executable_path=executable_path)
     driver.get("https://dian.ysbang.cn/index.html#/login")
@@ -34,7 +34,9 @@ def crawl_hezongyy(count):
     time.sleep(5)
     driver.get("https://dian.ysbang.cn/index.html#/supplierstore?providerId=2758")
     time.sleep(5)
-    driver.find_element_by_xpath('//*[@id="app"]/div/div[1]/div[2]/div[1]/div/div[2]/div[2]').click()
+    # driver.find_element_by_xpath('//*[@id="app"]/div/div[1]/div[2]/div[1]/div/div[2]/div[2]').click()
+    driver.find_element_by_class_name('provider-tab active')  # 全部商品
+    time.sleep(5)
     for i in range(1, count+1):
         time.sleep(3)  # 停顿3秒等待页面加载完毕！！！（必须留有页面加载的时间，否则获得的源代码会不完整。）
         html_sourcode = driver.page_source
