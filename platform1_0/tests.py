@@ -13,5 +13,5 @@ import re
 # seq = ("a", "b", "c")  # 字符串序列
 # print(" ".join(seq))
 
-for i in range(1,31):
+for i in range(1,5):
     print(i)

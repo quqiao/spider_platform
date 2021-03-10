@@ -8,7 +8,7 @@ import pymysql
 import openpyxl
 from bs4 import BeautifulSoup
 
-"""药师帮-乐药购旗舰店全部品种"""
+"""药师帮-拓创医药旗舰店全部品种"""
 
 
 list_mingzi = []
@@ -42,13 +42,13 @@ def crawl_ysb_lyg():
     time.sleep(1)
     driver.maximize_window()  # 进行全屏展示
     time.sleep(5)
-    driver.get("https://dian.ysbang.cn/index.html#/supplierstore?providerId=2758")
+    driver.get("https://dian.ysbang.cn/index.html#/supplierstore?providerId=3347")
     time.sleep(5)
     driver.find_element_by_xpath('//*[@id="app"]/div/div[1]/div[2]/div[1]/div[2]/div/div[1]/div[2]').click()  # 全部商品
     time.sleep(5)
 
 
-    for i in range(1, 132):
+    for i in range(1, 82):
         time.sleep(3)  # 停顿3秒等待页面加载完毕！！！（必须留有页面加载的时间，否则获得的源代码会不完整。）
         html_sourcode = driver.page_source
         html = etree.HTML(html_sourcode, etree.HTMLParser())
@@ -56,6 +56,11 @@ def crawl_ysb_lyg():
             jg = html.xpath('//*[@id="app"]/div/div[1]/div[2]/div[2]/div/div[4]/div[1]/div[%d]/div[2]/div[1]/strong/text()' % j)
             jg1 = ''.join(jg)
             list_price1.append(jg1)
+
+            jg2 = html.xpath('//*[@id="app"]/div/div[1]/div[2]/div[2]/div/div[4]/div[1]/div[%d]/div[2]/div[1]/span/text()' % j)
+            jg3 = ''.join(jg2)
+            list_price2.append(jg3)
+
         for t in range(1, 61):
             mz = html.xpath('//*[@id="app"]/div/div[1]/div[2]/div[2]/div/div[4]/div[1]/div[%d]/div[2]/div[2]/span/text()' % t)
             mz1 = ''.join(mz)
@@ -80,14 +85,14 @@ def crawl_ysb_lyg():
 """保存为csv格式文件"""
 def save_csv():
     """使用csv保存数据"""
-    dataframe = pd.DataFrame({'价格': list_price1, '药名': list_mingzi, '厂家': list_compamy, '效期': list_xiaoqi})  # 字典中的key值即为csv中列名
-    dataframe.to_csv("ysb_lyg_20210310.csv", index=False, sep=',')  # 将DataFrame存储为csv,index表示是否显示行名，default=True
+    # dataframe = pd.DataFrame({'价格': list_price1, '药名': list_mingzi, '厂家': list_compamy, '效期': list_xiaoqi})  # 字典中的key值即为csv中列名
+    # dataframe.to_csv("ysb_lyg_20210310.csv", index=False, sep=',')  # 将DataFrame存储为csv,index表示是否显示行名，default=True
 
-    # """通过xlsx保存数据"""
-    # data = {'价格': list_price1, '药名': list_mingzi, '厂家': list_compamy, '效期': list_xiaoqi}
-    # dataframe = pd.DataFrame(data, columns=['价格', '药名', '厂家', '效期'])
-    # dataframe.to_excel("scjuchuang_yp_lyg_20210309.xlsx", encoding='utf-8', index=False, header=True, sheet_name='聚创')
-    # print(dataframe)
+    """通过xlsx保存数据"""
+    data = {'价格': list_price1, '折后约': list_price2, '药名': list_mingzi, '厂家': list_compamy, '效期': list_xiaoqi}
+    dataframe = pd.DataFrame(data, columns=['价格', '折后约', '药名', '厂家', '效期'])
+    dataframe.to_excel("ysb_tcyy_20210310.xlsx", encoding='utf-8', index=False, header=True, sheet_name='拓创医药')
+    print(dataframe)
 
     # """在已有的excel中加入新的sheet保存数据"""
     # nowtime = time.strftime('%Y%m%d', time.localtime(time.time()))  # 获取当前时间并转化为类似20201217的格式
