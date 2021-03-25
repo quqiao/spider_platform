@@ -13,5 +13,8 @@ import re
 # seq = ("a", "b", "c")  # 字符串序列
 # print(" ".join(seq))
 
-for i in range(1,5):
-    print(i)
+# for i in range(1,5):
+#     print(i)
+r = 3
+r += 3
+print(r)
